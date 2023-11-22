@@ -1,0 +1,21 @@
+# fly.toml app configuration file generated for svelte-debt on 2023-11-21T20:58:13-06:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = "svelte-debt"
+primary_region = "ord"
+
+[build]
+
+[http_service]
+  internal_port = 3000
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ["app"]
+
+[mounts]
+  destination = "/pb/pb_data"
+  source = "pb_data"
