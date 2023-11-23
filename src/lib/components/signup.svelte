@@ -1,6 +1,7 @@
 <script lang="ts">
-	import { ClientResponseError } from 'pocketbase';
-	import { pb } from '../pocketbase';
+	import { enhance } from '$app/forms';
+	import { goto } from '$app/navigation';
+	import { pb } from '$lib/pocketbase';
 
 	export let isLogin: boolean;
 	let inputError:
@@ -10,51 +11,52 @@
 		  }
 		| undefined;
 	let loginError: string | undefined;
-	const login = async () => {
-		try {
-			await pb.collection('users').authWithPassword(username, password);
-		} catch (error) {
-			if (error instanceof ClientResponseError) {
-				if (!!Object.keys(error.data)) {
-					loginError = error.response.message;
-				} else {
-					inputError = error.response.data;
-				}
-			}
-		}
-	};
 </script>
 
 <div class="container">
-	<form on:submit|preventDefault={login} class="login-container">
+	<form
+		class="login-container"
+		action="/login?/signup"
+		use:enhance={({ formData }) => {
+			return async ({ result, update }) => {
+				if (result.type === 'success') {
+					const email = String(formData.get('email'));
+					const pass = String(formData.get('password'));
+					await pb.collection('users').authWithPassword(email, pass);
+					goto('/');
+				}
+			};
+		}}
+		method="post"
+	>
 		<div class="header">
-			<h3 style="margin: 0;">Create Account</h3>
+			<h2 style="margin: 0;">Create Account</h2>
 		</div>
 		<div class="input-container">
-			<input
-				placeholder="Username"
-				on:focus={() => {
-					inputError = undefined;
-					loginError = undefined;
-				}}
-			/>
+			<input placeholder="Name" name="name" />
 			{#if !!inputError?.identity || !!loginError}
 				<p class="error-response">{loginError || inputError?.identity.message}</p>
 			{/if}
 		</div>
 		<div class="input-container">
-			<input type="password" placeholder="Password" />
+			<input placeholder="Email" type="email" name="email" />
+			{#if !!inputError?.identity || !!loginError}
+				<p class="error-response">{loginError || inputError?.identity.message}</p>
+			{/if}
+		</div>
+		<div class="input-container">
+			<input type="password" placeholder="Password" name="password" />
 			{#if !!inputError?.password}
 				<p class="error-response">{inputError?.password.message}</p>
 			{/if}
 		</div>
 		<div class="input-container">
-			<input type="password" placeholder="Confirm Password" />
+			<input type="password" placeholder="Confirm Password" name="passwordConfirm" />
 			{#if !!inputError?.password}
 				<p class="error-response">{inputError?.password.message}</p>
 			{/if}
 		</div>
-		<button>LOG IN</button>
+		<button type="submit">Sign Up</button>
 		<p>
 			Already have an account?
 			<span>
@@ -68,6 +70,7 @@
 	.input-container {
 		display: flex;
 		flex-direction: column;
+		width: 100%;
 		gap: 0.5em;
 	}
 	.container {

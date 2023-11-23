@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { ClientResponseError } from 'pocketbase';
 	import { pb } from '../pocketbase';
+	import { goto } from '$app/navigation';
 	let username: string;
 	let password: string;
 	export let isLogin: boolean;
@@ -14,6 +15,7 @@
 	const login = async () => {
 		try {
 			await pb.collection('users').authWithPassword(username, password);
+			goto('/');
 		} catch (error) {
 			if (error instanceof ClientResponseError) {
 				if (!!Object.keys(error.data)) {
