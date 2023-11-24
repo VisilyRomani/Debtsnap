@@ -6,7 +6,7 @@
 
 <div class="friends">
 	{#each friends as friend, idx (idx)}
-		<div class="profile-header" transition:fly={{ y: 100, duration: 1000, delay: idx * 150 }}>
+		<div class="profile-header" transition:fly={{ y: 100, duration: 500, delay: idx * 150 }}>
 			<img
 				alt="avatar"
 				width="50px"

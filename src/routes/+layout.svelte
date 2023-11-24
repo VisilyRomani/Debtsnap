@@ -1,8 +1,9 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import '../global.css';
+	import { onMount } from 'svelte';
 	import { pb } from '$lib/pocketbase';
 	import { goto } from '$app/navigation';
+	import { Toaster } from 'svelte-french-toast';
 	import Home from '$lib/icons/home.svelte';
 	import Friends from '$lib/icons/friends.svelte';
 
@@ -37,6 +38,7 @@
 		</a>
 	</nav>
 </div>
+<Toaster />
 
 <style>
 	.icon {

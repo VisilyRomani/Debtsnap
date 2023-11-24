@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { currentUser, pb } from '$lib/pocketbase';
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import Add from '$lib/icons/add.svelte';
 	import Modal from '$lib/components/modal/Modal.svelte';
 	import type { PageData } from './$types';
@@ -8,41 +8,75 @@
 	import Friends from '$lib/components/friends.svelte';
 	import type { TUser } from './+page.server';
 	import Requests from '$lib/components/requests.svelte';
+	import toast from 'svelte-french-toast';
 
 	let showRequest = false;
-
+	let showModal = false;
 	export let data: PageData;
+
 	const { form, errors, enhance, reset } = superForm(data.friendForm, {
+		taintedMessage: null,
+		resetForm: true,
 		onSubmit: ({ formData }) => {
 			formData.append('id', $currentUser?.id ?? '');
+		},
+		onResult: ({ result }) => {
+			if (result.type === 'success') {
+				toast.success('Friend request Sent');
+				showModal = !showModal;
+			}
 		}
 	});
 
-	let showModal = false;
 	$: showModal && reset();
+
+	const getFriends = async () => {
+		return (
+			(
+				await pb
+					.collection('users')
+					.getOne<{ expand: { friends: { id: string; name: string; username: string }[] } }>(
+						$currentUser?.id ?? '',
+						{
+							expand: 'friends',
+							fields: 'expand.friends.id,expand.friends.name,expand.friends.username'
+						}
+					)
+			).expand?.friends ?? []
+		);
+	};
+
+	const getFriendRequests = async () => {
+		return (
+			(
+				await pb
+					.collection('friend_request')
+					.getFullList<{ expand: { sender: { id: string; name: string } }; id: string }>({
+						expand: 'sender',
+						fields: 'expand.sender.id,expand.sender.name,expand.sender.username,id'
+					})
+			).map((d) => ({ id: d.id, sender_id: d.expand.sender.id, name: d.expand.sender.name })) ?? []
+		);
+	};
+
 	let friends: TUser;
 	let requests: { id: string; sender_id: string; name: string }[];
-	onMount(async () => {
-		friends = (
-			await pb
-				.collection('users')
-				.getOne<{ expand: { friends: { id: string; name: string; username: string }[] } }>(
-					$currentUser?.id ?? '',
-					{
-						expand: 'friends',
-						fields: 'expand.friends.id,expand.friends.name,expand.friends.username'
-					}
-				)
-		).expand.friends;
 
-		requests = (
-			await pb
-				.collection('friend_request')
-				.getFullList<{ expand: { sender: { id: string; name: string } }; id: string }>({
-					expand: 'sender',
-					fields: 'expand.sender.id,expand.sender.name,expand.sender.username,id'
-				})
-		).map((d) => ({ id: d.id, sender_id: d.expand.sender.id, name: d.expand.sender.name }));
+	pb.collection('users').subscribe('*', async () => {
+		friends = await getFriends();
+	});
+	pb.collection('friend_request').subscribe('*', async () => {
+		requests = await getFriendRequests();
+	});
+
+	onMount(async () => {
+		friends = await getFriends();
+		requests = await getFriendRequests();
+	});
+
+	onDestroy(() => {
+		pb.collection('users').unsubscribe('friends');
+		pb.collection('friend_request').unsubscribe('reciever');
 	});
 </script>
 
@@ -80,14 +114,16 @@
 		<Friends {friends} />
 	{/if}
 </div>
-<div class="add">
-	<button style="all:unset;" on:click={() => (showModal = true)}>
-		<Add size={50} />
-	</button>
-</div>
+{#if showRequest}
+	<div class="add">
+		<button style="all:unset;" on:click={() => (showModal = true)}>
+			<Add size={50} />
+		</button>
+	</div>
+{/if}
 
 <Modal bind:showModal>
-	<form action="/profile?/addFriend" method="post" use:enhance>
+	<form action="/profile?/sendFriendRequest" method="post" use:enhance>
 		<h3>Add Friend</h3>
 		<div class="friend-container">
 			<div>
