@@ -188,18 +188,6 @@
 		border-bottom: 1px solid var(--dark-text);
 	}
 
-	.add {
-		position: absolute;
-		right: 30px;
-		bottom: 80px;
-	}
-	.add {
-		fill: var(--dark-text);
-	}
-
-	.add:hover {
-		fill: var(--light-text);
-	}
 	.invalid {
 		color: rgb(175, 56, 56);
 		background-color: rgb(232, 174, 174);

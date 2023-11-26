@@ -4,6 +4,8 @@
 	--light-text: #a4b7a9;
 
 	--light-accent: #ccfccb;
+	--light-secondary: #96e6b3;
+
 	--dark-accent: #568259;
 }
 html,
@@ -59,4 +61,15 @@ p {
 
 a {
 	text-decoration: none;
+}
+
+.add {
+	position: absolute;
+	right: 30px;
+	bottom: 80px;
+	fill: var(--dark-text);
+}
+
+.add:hover {
+	fill: var(--light-text);
 }

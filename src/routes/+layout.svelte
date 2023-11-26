@@ -6,6 +6,7 @@
 	import { Toaster } from 'svelte-french-toast';
 	import Home from '$lib/icons/home.svelte';
 	import Friends from '$lib/icons/friends.svelte';
+	import Validate from '$lib/icons/validate.svelte';
 
 	onMount(async () => {
 		try {
@@ -24,10 +25,16 @@
 		<slot />
 	</div>
 	<nav class="bottom-nav">
-		<a href="/">
+		<a href="/confirm">
+			<div class="icon">
+				<Validate size={30} />
+				Confirm
+			</div>
+		</a>
+		<a href="/dashboard">
 			<div class="icon">
 				<Home size={30} />
-				Home
+				Dashboard
 			</div>
 		</a>
 		<a href="/profile">
@@ -49,6 +56,7 @@
 	}
 	.content {
 		height: 100%;
+		max-height: 100%;
 	}
 	a {
 		text-align: center;
