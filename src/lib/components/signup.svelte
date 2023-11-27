@@ -1,59 +1,76 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
 	import { goto } from '$app/navigation';
 	import { pb } from '$lib/pocketbase';
+	import { superForm } from 'sveltekit-superforms/client';
+	import type { PageData } from '../../routes/login/$types';
+	export let data: PageData;
+
+	const { form, errors, enhance } = superForm(data.signupForm, {
+		onResult: async ({ result }) => {
+			if (result.type === 'success') {
+				try {
+					await pb.collection('users').authWithPassword($form.email, $form.password);
+					await goto('/dashboard');
+				} catch (e) {
+					console.error(e);
+				}
+			}
+		}
+	});
 
 	export let isLogin: boolean;
-	let inputError:
-		| {
-				identity: { code: string; message: string };
-				password: { code: string; message: string };
-		  }
-		| undefined;
-	let loginError: string | undefined;
 </script>
 
 <div class="container">
-	<form
-		class="login-container"
-		action="/login?/signup"
-		use:enhance={({ formData }) => {
-			return async ({ result, update }) => {
-				if (result.type === 'success') {
-					const email = String(formData.get('email'));
-					const pass = String(formData.get('password'));
-					await pb.collection('users').authWithPassword(email, pass);
-					goto('/');
-				}
-			};
-		}}
-		method="post"
-	>
+	<form class="login-container" action="/login?/signup" use:enhance method="post">
 		<div class="header">
 			<h2 style="margin: 0;">Create Account</h2>
 		</div>
 		<div class="input-container">
-			<input placeholder="Name" name="name" />
-			{#if !!inputError?.identity || !!loginError}
-				<p class="error-response">{loginError || inputError?.identity.message}</p>
+			<input
+				placeholder="Name"
+				name="name"
+				bind:value={$form.name}
+				style={$errors.name && 'border:2px solid rgb(232, 174, 174)'}
+			/>
+			{#if $errors.name}
+				<p class="error-response">{$errors.name}</p>
 			{/if}
 		</div>
 		<div class="input-container">
-			<input placeholder="Email" type="email" name="email" />
-			{#if !!inputError?.identity || !!loginError}
-				<p class="error-response">{loginError || inputError?.identity.message}</p>
+			<input
+				placeholder="Email"
+				type="email"
+				name="email"
+				bind:value={$form.email}
+				style={$errors.email && 'border:2px solid rgb(232, 174, 174)'}
+			/>
+			{#if $errors.email}
+				<p class="error-response">{$errors.email}</p>
 			{/if}
 		</div>
 		<div class="input-container">
-			<input type="password" placeholder="Password" name="password" />
-			{#if !!inputError?.password}
-				<p class="error-response">{inputError?.password.message}</p>
+			<input
+				type="password"
+				placeholder="Password"
+				name="password"
+				bind:value={$form.password}
+				style={$errors.password && 'border:2px solid rgb(232, 174, 174)'}
+			/>
+			{#if $errors.password}
+				<p class="error-response">{$errors.password}</p>
 			{/if}
 		</div>
 		<div class="input-container">
-			<input type="password" placeholder="Confirm Password" name="passwordConfirm" />
-			{#if !!inputError?.password}
-				<p class="error-response">{inputError?.password.message}</p>
+			<input
+				type="password"
+				placeholder="Confirm Password"
+				name="passwordConfirm"
+				bind:value={$form.passwordConfirm}
+				style={$errors.passwordConfirm && 'border:2px solid rgb(232, 174, 174)'}
+			/>
+			{#if $errors.passwordConfirm}
+				<p class="error-response">{$errors.passwordConfirm}</p>
 			{/if}
 		</div>
 		<button type="submit">Sign Up</button>
@@ -92,12 +109,5 @@
 	}
 	.signup:hover {
 		color: var(--light-text);
-	}
-	.error-response {
-		color: rgb(175, 56, 56);
-		background-color: rgb(232, 174, 174);
-		padding: 0.2em;
-		margin: 0;
-		border-radius: 0.4em;
 	}
 </style>

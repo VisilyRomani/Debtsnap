@@ -14,6 +14,10 @@
 	let loginError: string | undefined;
 	const login = async () => {
 		try {
+			if (!username || !password) {
+				loginError = 'Fields are required';
+				return;
+			}
 			await pb.collection('users').authWithPassword(username, password);
 			goto('/dashboard');
 		} catch (error) {
@@ -38,6 +42,7 @@
 			<input
 				bind:value={username}
 				placeholder="Username"
+				style={(loginError || loginError) && 'border:2px solid rgb(232, 174, 174)'}
 				on:focus={() => {
 					inputError = undefined;
 					loginError = undefined;
@@ -67,6 +72,7 @@
 	.input-container {
 		display: flex;
 		flex-direction: column;
+		width: 100%;
 		gap: 0.5em;
 	}
 	.container {
