@@ -25,10 +25,10 @@
 <style>
 	.friends {
 		width: 100%;
+		overflow-y: auto;
 	}
 	.profile-header {
-		margin: 0.5em;
-		width: 100%;
+		padding: 0.5em;
 		display: flex;
 		text-align: center;
 		gap: 1em;

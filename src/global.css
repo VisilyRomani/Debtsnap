@@ -1,6 +1,8 @@
 :root {
 	--main-bg-color: #f1fffa;
 	--dark-text: #464e47;
+	--dark-alt: #868786;
+
 	--light-text: #a4b7a9;
 
 	--light-accent: #ccfccb;
@@ -16,6 +18,7 @@ body {
 	color: var(--dark-text);
 	font-family: Arial;
 	background-color: var(--main-bg-color);
+	overflow: hidden;
 }
 
 button {
@@ -66,8 +69,8 @@ a {
 .add {
 	position: absolute;
 	right: 30px;
-	bottom: 80px;
-	fill: var(--dark-text);
+	bottom: 15%;
+	fill: var(--dark-alt);
 }
 
 .add:hover {

@@ -32,8 +32,6 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@dicebear/collection": "^7.0.1",
-		"@dicebear/core": "^7.0.1",
 		"pocketbase": "^0.19.0",
 		"svelte-french-toast": "^1.2.0"
 	}

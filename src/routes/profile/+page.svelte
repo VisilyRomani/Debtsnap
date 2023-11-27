@@ -9,6 +9,7 @@
 	import type { TUser } from './+page.server';
 	import Requests from '$lib/components/requests.svelte';
 	import toast from 'svelte-french-toast';
+	import { getFriendRequests, getFriends } from '$lib/functions/friend';
 
 	let showRequest = false;
 	let showModal = false;
@@ -30,47 +31,18 @@
 
 	$: showModal && reset();
 
-	const getFriends = async () => {
-		return (
-			(
-				await pb
-					.collection('users')
-					.getOne<{ expand: { friends: { id: string; name: string; username: string }[] } }>(
-						$currentUser?.id ?? '',
-						{
-							expand: 'friends',
-							fields: 'expand.friends.id,expand.friends.name,expand.friends.username'
-						}
-					)
-			).expand?.friends ?? []
-		);
-	};
-
-	const getFriendRequests = async () => {
-		return (
-			(
-				await pb
-					.collection('friend_request')
-					.getFullList<{ expand: { sender: { id: string; name: string } }; id: string }>({
-						expand: 'sender',
-						fields: 'expand.sender.id,expand.sender.name,expand.sender.username,id'
-					})
-			).map((d) => ({ id: d.id, sender_id: d.expand.sender.id, name: d.expand.sender.name })) ?? []
-		);
-	};
-
 	let friends: TUser;
 	let requests: { id: string; sender_id: string; name: string }[];
 
 	pb.collection('users').subscribe('*', async () => {
-		friends = await getFriends();
+		friends = await getFriends($currentUser?.id ?? '');
 	});
 	pb.collection('friend_request').subscribe('*', async () => {
 		requests = await getFriendRequests();
 	});
 
 	onMount(async () => {
-		friends = await getFriends();
+		friends = await getFriends($currentUser?.id ?? '');
 		requests = await getFriendRequests();
 	});
 
@@ -109,18 +81,13 @@
 	</div>
 	<hr style="width: 90%;" />
 	{#if showRequest}
+		<button style="width: 90%;" on:click={() => (showModal = true)}> Add Friend </button>
 		<Requests {requests} />
 	{:else}
 		<Friends {friends} />
 	{/if}
 </div>
-{#if showRequest}
-	<div class="add">
-		<button style="all:unset;" on:click={() => (showModal = true)}>
-			<Add size={50} />
-		</button>
-	</div>
-{/if}
+<button on:click={() => pb.authStore.clear()}>Log Out</button>
 
 <Modal bind:showModal>
 	<form action="/profile?/sendFriendRequest" method="post" use:enhance>

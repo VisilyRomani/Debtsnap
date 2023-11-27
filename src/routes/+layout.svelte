@@ -7,6 +7,7 @@
 	import Home from '$lib/icons/home.svelte';
 	import Friends from '$lib/icons/friends.svelte';
 	import Validate from '$lib/icons/validate.svelte';
+	import { page } from '$app/stores';
 
 	onMount(async () => {
 		try {
@@ -20,31 +21,35 @@
 	});
 </script>
 
-<div class="nav_container">
-	<div class="content">
-		<slot />
+{#if !($page.route.id === '/login')}
+	<div class="nav_container">
+		<div class="content">
+			<slot />
+		</div>
+		<nav class="bottom-nav">
+			<a href="/confirm">
+				<div class="icon">
+					<Validate size={30} />
+					Confirm
+				</div>
+			</a>
+			<a href="/dashboard">
+				<div class="icon">
+					<Home size={30} />
+					Dashboard
+				</div>
+			</a>
+			<a href="/profile">
+				<div class="icon">
+					<Friends size={30} />
+					Profile
+				</div>
+			</a>
+		</nav>
 	</div>
-	<nav class="bottom-nav">
-		<a href="/confirm">
-			<div class="icon">
-				<Validate size={30} />
-				Confirm
-			</div>
-		</a>
-		<a href="/dashboard">
-			<div class="icon">
-				<Home size={30} />
-				Dashboard
-			</div>
-		</a>
-		<a href="/profile">
-			<div class="icon">
-				<Friends size={30} />
-				Profile
-			</div>
-		</a>
-	</nav>
-</div>
+{:else}
+	<slot />
+{/if}
 <Toaster />
 
 <style>
@@ -55,8 +60,9 @@
 		align-items: center;
 	}
 	.content {
-		height: 100%;
-		max-height: 100%;
+		height: 90%;
+		display: flex;
+		flex-direction: column;
 	}
 	a {
 		text-align: center;
@@ -73,7 +79,7 @@
 
 	.nav_container {
 		display: flex;
-		height: 100%;
+		height: 100vh;
 		flex-direction: column;
 		justify-content: space-between;
 	}

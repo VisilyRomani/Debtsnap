@@ -15,7 +15,7 @@
 	const login = async () => {
 		try {
 			await pb.collection('users').authWithPassword(username, password);
-			goto('/');
+			goto('/dashboard');
 		} catch (error) {
 			if (error instanceof ClientResponseError) {
 				if (!!Object.keys(error.data)) {

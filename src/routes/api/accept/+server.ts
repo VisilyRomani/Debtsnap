@@ -14,7 +14,6 @@ export const POST = async ({ locals, request }) => {
 	} = await request.json();
 
 	try {
-		console.log(accept, sender, reciever, id);
 		if (accept) {
 			locals.server_pb.collection('users').update(sender, { requestKey: null });
 			locals.server_pb
