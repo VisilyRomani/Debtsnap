@@ -63,6 +63,8 @@
 		display: flex;
 		flex-direction: column;
 		overflow: auto;
+		position: relative;
+		height: 100%;
 	}
 	a {
 		text-align: center;
@@ -78,10 +80,10 @@
 	}
 
 	.nav_container {
-		position: absolute;
+		position: relative;
 		width: 100%;
+		height: 100%;
 		display: flex;
-		height: 100vh;
 		flex-direction: column;
 		justify-content: space-between;
 	}
@@ -92,7 +94,6 @@
 		display: flex;
 		gap: 1px;
 		padding: 0px 1px 1px 0px;
-
 		background-color: var(--light-accent);
 	}
 </style>
