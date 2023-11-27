@@ -50,7 +50,7 @@
 		debts = await getAllDebt();
 	});
 
-	$: sortedDebts = debts?.sort((a, b) => (!(a.resolved === b.resolved) ? 0 : a ? -1 : 1));
+	$: sortedDebts = debts?.sort((a, b) => (a.resolved === b.resolved ? 0 : a.resolved ? 1 : -1));
 	$: amountOwed =
 		debts
 			?.filter((d) => !d.resolved)
