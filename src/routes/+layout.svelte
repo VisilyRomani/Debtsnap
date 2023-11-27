@@ -60,9 +60,9 @@
 		align-items: center;
 	}
 	.content {
-		height: 90%;
 		display: flex;
 		flex-direction: column;
+		overflow: auto;
 	}
 	a {
 		text-align: center;
@@ -78,12 +78,17 @@
 	}
 
 	.nav_container {
+		position: absolute;
+		width: 100%;
 		display: flex;
 		height: 100vh;
 		flex-direction: column;
 		justify-content: space-between;
 	}
 	.bottom-nav {
+		position: relative;
+		bottom: 0;
+		width: 100%;
 		display: flex;
 		gap: 1px;
 		padding: 0px 1px 1px 0px;
