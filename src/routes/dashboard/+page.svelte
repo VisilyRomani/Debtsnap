@@ -20,9 +20,9 @@
 	let selectedDebt: string;
 	export let data: PageData;
 
-	// onMount(async () => {
-	// 	debts = getAllDebt();
-	// });
+	onMount(async () => {
+		debts = getAllDebt();
+	});
 
 	onDestroy(() => {
 		pb.collection('debts').unsubscribe();
@@ -42,18 +42,17 @@
 		debts = getAllDebt();
 	});
 
-	const sortAndFilter = async () => {
-		const debt = await getAllDebt();
-		const sortedDebts = (debt ?? []).sort((a, b) =>
+	const sortAndFilter = async (debts: Promise<TDebt[]>) => {
+		const sortedDebts = ((await debts) ?? []).sort((a, b) =>
 			a.status === b.status ? 0 : a.status === 'completed' ? 1 : 0
 		);
 		const amountOwed =
-			debt
+			(await debts)
 				?.filter((d) => !(d.status === 'completed'))
 				.reduce((acc, cur) => {
 					return acc + (cur.expand.debt_to.id !== $currentUser?.id ? cur.cost : 0);
 				}, 0) ?? 0;
-		await delay(500);
+		// await delay(500);
 
 		return { sortedDebts, amountOwed };
 	};
@@ -73,7 +72,7 @@
 </script>
 
 <!-- Main body -->
-{#await sortAndFilter()}
+{#await sortAndFilter(debts)}
 	<div class="full-screen">
 		<div out:fade={{ duration: 100 }} class="loader" on:outroend={() => (visible = true)}></div>
 	</div>
