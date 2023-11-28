@@ -9,9 +9,8 @@
 	export let data: PageData;
 	export let newDebtModal = false;
 	export let friends: TUser;
-	$: newDebtModal && reset();
 
-	const { form, errors, enhance, reset } = superForm(data.debtForm, {
+	const { form, errors, enhance } = superForm(data.debtForm, {
 		taintedMessage: null,
 		resetForm: true,
 		onSubmit: ({ formData }) => {
@@ -21,7 +20,7 @@
 			console.log(result);
 			if (result.type === 'success') {
 				toast.success('Debt Sent');
-				newDebtModal = !newDebtModal;
+				newDebtModal = false;
 			}
 		}
 	});

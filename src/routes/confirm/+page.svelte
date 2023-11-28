@@ -40,12 +40,20 @@
 		});
 	};
 
-	const requestReponse = async ({ accept, debt_id }: { accept: boolean; debt_id: string }) => {
-		const reponse = await fetch('/api/confirmDebt', {
+	const requestReponse = async ({
+		id,
+		accept,
+		debt_id
+	}: {
+		id: string;
+		accept: boolean;
+		debt_id: string;
+	}) => {
+		await fetch('/api/confirmDebt', {
 			method: 'post',
-			body: JSON.stringify({ debt_id, accept })
+			body: JSON.stringify({ id, debt_id, accept })
 		});
-		console.log(reponse);
+		debt_confirms = await getDebtConfirm();
 	};
 </script>
 
@@ -77,12 +85,14 @@
 			<div style="display:flex; gap:1em;font-size: 1.2em; ">
 				<button
 					type="button"
-					on:click={() => requestReponse({ debt_id: confirm.expand.debt.id, accept: false })}
+					on:click={() =>
+						requestReponse({ id: confirm.id, debt_id: confirm.expand.debt.id, accept: false })}
 					>Decline</button
 				>
 				<button
 					type="button"
-					on:click={() => requestReponse({ debt_id: confirm.expand.debt.id, accept: true })}
+					on:click={() =>
+						requestReponse({ id: confirm.id, debt_id: confirm.expand.debt.id, accept: true })}
 					>Accept</button
 				>
 			</div>

@@ -9,8 +9,6 @@
 	export let payDebtModal = false;
 	export let selectedDebt: string;
 
-	$: payDebtModal && reset();
-
 	const { form, errors, enhance, reset } = superForm(data.paymentForm, {
 		taintedMessage: null,
 		resetForm: true,
