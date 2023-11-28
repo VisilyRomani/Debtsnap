@@ -34,7 +34,7 @@
 
 <div class="container">
 	<form on:submit|preventDefault={login} class="login-container">
-		<div class="header">
+		<div style="text-align:center;">
 			<h1 style="margin: 0;">Welcome 🤟</h1>
 			<h4 style="margin: 0;">Login to DebtSnap</h4>
 		</div>
