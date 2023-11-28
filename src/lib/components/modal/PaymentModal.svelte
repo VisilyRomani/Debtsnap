@@ -23,22 +23,20 @@
 	});
 </script>
 
-{#if payDebtModal}
-	<Modal bind:showModal={payDebtModal}>
-		<form action="/dashboard?/paymentRequest" method="post" use:enhance>
-			<h3>Payment Request</h3>
-			<textarea
-				bind:value={$form.payment_details}
-				name="payment_details"
-				placeholder="Enter payment details..."
-			/>
-			{#if $errors.payment_details}
-				<p class="error-response">{$errors.payment_details}</p>
-			{/if}
-			<button> submit </button>
-		</form>
-	</Modal>
-{/if}
+<Modal bind:showModal={payDebtModal}>
+	<form action="/dashboard?/paymentRequest" method="post" use:enhance>
+		<h3>Payment Request</h3>
+		<textarea
+			bind:value={$form.payment_details}
+			name="payment_details"
+			placeholder="Enter payment details..."
+		/>
+		{#if $errors.payment_details}
+			<p class="error-response">{$errors.payment_details}</p>
+		{/if}
+		<button> submit </button>
+	</form>
+</Modal>
 
 <style>
 	form {

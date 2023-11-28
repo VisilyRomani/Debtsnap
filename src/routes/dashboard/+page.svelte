@@ -153,9 +153,6 @@
 			{/each}
 		</div>
 
-		<DebtModal bind:data bind:newDebtModal {friends} />
-		<PaymentModal bind:data {selectedDebt} bind:payDebtModal />
-
 		<div class="add">
 			<button type="button" style="all:unset;" on:click={() => (newDebtModal = true)}>
 				<Add size={50} />
@@ -163,6 +160,8 @@
 		</div>
 	{/if}
 {/await}
+<DebtModal bind:data bind:newDebtModal {friends} />
+<PaymentModal bind:data {selectedDebt} bind:payDebtModal />
 
 <style>
 	/* Main Dashboard  */
