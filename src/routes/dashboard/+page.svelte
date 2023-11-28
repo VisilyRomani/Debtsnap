@@ -20,10 +20,9 @@
 	let selectedDebt: string;
 	export let data: PageData;
 
-	onMount(async () => {
-		debts = getAllDebt();
-		friends = await getFriends($currentUser?.id ?? '');
-	});
+	// onMount(async () => {
+	// 	debts = getAllDebt();
+	// });
 
 	onDestroy(() => {
 		pb.collection('debts').unsubscribe();
@@ -43,8 +42,8 @@
 		debts = getAllDebt();
 	});
 
-	const sortAndFilter = async (debts: Promise<TDebt[]>) => {
-		const sortedDebts = ((await debts) ?? []).sort((a, b) =>
+	const sortAndFilter = async () => {
+		const sortedDebts = ((await getAllDebt()) ?? []).sort((a, b) =>
 			a.status === b.status ? 0 : a.status === 'completed' ? 1 : 0
 		);
 		const amountOwed =
@@ -54,7 +53,6 @@
 					return acc + (cur.expand.debt_to.id !== $currentUser?.id ? cur.cost : 0);
 				}, 0) ?? 0;
 		await delay(500);
-		console.log(sortedDebts);
 
 		return { sortedDebts, amountOwed };
 	};
@@ -74,7 +72,7 @@
 </script>
 
 <!-- Main body -->
-{#await sortAndFilter(debts)}
+{#await sortAndFilter()}
 	<div class="full-screen">
 		<div out:fade={{ duration: 100 }} class="loader" on:outroend={() => (visible = true)}></div>
 	</div>
@@ -101,7 +99,7 @@
 								class="avatar"
 								alt="avatar"
 								width="50px"
-								src="https://api.dicebear.com/7.x/bottts/svg?seed={debt.expand.debt_to.id}"
+								src="https://api.dicebear.com/7.x/bottts/svg?seed={debt.expand.debt_from.id}"
 							/>
 							<div style="display: flex; flex-direction: column;">
 								<h3>${(debt.cost / 100).toFixed(2)}</h3>
@@ -160,13 +158,18 @@
 		</div>
 
 		<div class="add">
-			<button type="button" style="all:unset;" on:click={() => (newDebtModal = true)}>
+			<button
+				type="button"
+				style="all:unset;"
+				name="add debt"
+				on:click={() => (newDebtModal = true)}
+			>
 				<Add size={50} />
 			</button>
 		</div>
 	{/if}
 {/await}
-<DebtModal bind:data bind:newDebtModal {friends} />
+<DebtModal bind:data bind:newDebtModal />
 <PaymentModal bind:data {selectedDebt} bind:payDebtModal />
 
 <style>
