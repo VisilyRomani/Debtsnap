@@ -17,7 +17,7 @@ export const POST = async ({ locals, request }) => {
 			.update(debt_id, { status: accept ? 'completed' : 'requested' }, { requestKey: null });
 
 		if (!accept) {
-			await locals.server_pb.collection('debt_confirm').delete(id);
+			await locals.server_pb.collection('debt_confirm').delete(id, { requestKey: null });
 		}
 	} catch (e) {
 		return json({ message: 'Failed to Delete Request' });
