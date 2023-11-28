@@ -54,7 +54,17 @@
 
 <div class="container">
 	<h1>Profile</h1>
-	<div class="profile-header">
+	<button
+		class="profile-header"
+		on:click={async () => {
+			try {
+				await navigator.clipboard.writeText($currentUser?.id ?? '');
+				toast.success('Copied Id');
+			} catch (e) {
+				toast.error('Failed to copy Id');
+			}
+		}}
+	>
 		<img
 			class="avatar"
 			alt="avatar"
@@ -69,7 +79,7 @@
 				id:{$currentUser?.id}
 			</small>
 		</div>
-	</div>
+	</button>
 	<hr />
 	<div class="multi-select">
 		<button type="button" class="multi-button" on:click={() => (showRequest = false)}>
