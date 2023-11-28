@@ -81,8 +81,8 @@
 	{#if visible}
 		<div class="total-container">
 			<div class="amount-header">
-				<h4>Total Amount You Owe</h4>
-				<h2>${(value.amountOwed / 100).toFixed(2)}</h2>
+				<h2>Total Amount You Owe</h2>
+				<h1>${(value.amountOwed / 100).toFixed(2)}</h1>
 			</div>
 		</div>
 		<div class="friend-container">
@@ -186,7 +186,8 @@
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		padding: 2em;
+		padding: 1em;
+		gap: 0.5em;
 	}
 	.friend-container {
 		width: 100%;

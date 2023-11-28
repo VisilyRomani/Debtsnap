@@ -61,6 +61,17 @@
 	<h1>Debt Confirmation</h1>
 </div>
 
+{#if !debt_confirms.length}
+	<div class="full-screen">
+		<h3>
+			Nothing to confirm
+			<span class="dot">.</span>
+			<span class="dot">.</span>
+			<span class="dot">.</span>
+		</h3>
+	</div>
+{/if}
+
 <div class="confirm-container">
 	{#each debt_confirms as confirm}
 		<div class="confirm">
