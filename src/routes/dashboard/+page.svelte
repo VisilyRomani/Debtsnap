@@ -32,10 +32,10 @@
 
 	const getAllDebt = (): Promise<TDebt[]> => {
 		return pb.collection('debt').getFullList({
-			expand: 'debt_from, debt_to',
+			expand: 'debt_from, debt_to, debt_confirm(debt)',
 			sort: '-created',
 			fields:
-				'id, cost, created, description, status, expand.debt_from.name, expand.debt_from.id, expand.debt_to.name, expand.debt_to.id'
+				'id, cost, created, description, status, expand.debt_from.name, expand.debt_from.id, expand.debt_to.name, expand.debt_to.id, expand.debt_confirm(debt).payment_details'
 		});
 	};
 
@@ -54,6 +54,7 @@
 					return acc + (cur.expand.debt_to.id !== $currentUser?.id ? cur.cost : 0);
 				}, 0) ?? 0;
 		await delay(500);
+		console.log(sortedDebts);
 
 		return { sortedDebts, amountOwed };
 	};
@@ -130,6 +131,11 @@
 								<small>
 									Description: {debt.description}
 								</small>
+								{#if debt.status === 'completed'}
+									<small>
+										Payment: {debt.expand['debt_confirm(debt)'][0].payment_details}
+									</small>
+								{/if}
 							</div>
 						</div>
 					{/if}

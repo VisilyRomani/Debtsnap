@@ -9,6 +9,7 @@ export type TDebt = {
 	description: string;
 	status: 'pending' | 'requested' | 'completed';
 	expand: {
+		'debt_confirm(debt)': { payment_details: string }[];
 		debt_from: {
 			name: string;
 			id: string;
