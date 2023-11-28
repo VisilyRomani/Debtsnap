@@ -135,6 +135,7 @@
 		align-items: center;
 		height: 100%;
 		margin: 0em 1em 0em 1em;
+		padding-top: 1em;
 	}
 	.profile-header {
 		margin: 0.5em;

@@ -79,89 +79,87 @@
 	</div>
 {:then value}
 	{#if visible}
-		<div in:fade={{ duration: 101 }}>
-			<div class="total-container">
-				<div class="amount-header">
-					<h4>Total Amount You Owe</h4>
-					<h2>${(value.amountOwed / 100).toFixed(2)}</h2>
-				</div>
+		<div class="total-container">
+			<div class="amount-header">
+				<h4>Total Amount You Owe</h4>
+				<h2>${(value.amountOwed / 100).toFixed(2)}</h2>
 			</div>
-			<div class="friend-container">
-				{#each value.sortedDebts ?? [] as debt, idx (idx)}
-					<div
-						in:fly|global={{ y: 100, duration: 500, delay: idx * 150 + 101 }}
-						class="friend"
-						style={debt.expand.debt_to.id === $currentUser?.id
-							? 'border-left: 4px blue solid;'
-							: statusColor(debt.status)}
-					>
-						{#if debt.expand.debt_to.id === $currentUser?.id}
-							<div style="display: flex; align-items: center; gap: 0.5em;">
-								<img
-									class="avatar"
-									alt="avatar"
-									width="50px"
-									src="https://api.dicebear.com/7.x/bottts/svg?seed={debt.expand.debt_to.id}"
-								/>
-								<div style="display: flex; flex-direction: column;">
-									<h3>${(debt.cost / 100).toFixed(2)}</h3>
-									<small>
-										From:
-										{debt.expand.debt_from.name}
-									</small>
-									<small>
-										Description: {debt.description}
-									</small>
-								</div>
+		</div>
+		<div class="friend-container">
+			{#each value.sortedDebts ?? [] as debt, idx (idx)}
+				<div
+					in:fly|global={{ y: 100, duration: 500, delay: idx * 150 + 101 }}
+					class="friend"
+					style={debt.expand.debt_to.id === $currentUser?.id
+						? 'border-left: 4px blue solid;'
+						: statusColor(debt.status)}
+				>
+					{#if debt.expand.debt_to.id === $currentUser?.id}
+						<div style="display: flex; align-items: center; gap: 0.5em;">
+							<img
+								class="avatar"
+								alt="avatar"
+								width="50px"
+								src="https://api.dicebear.com/7.x/bottts/svg?seed={debt.expand.debt_to.id}"
+							/>
+							<div style="display: flex; flex-direction: column;">
+								<h3>${(debt.cost / 100).toFixed(2)}</h3>
+								<small>
+									From:
+									{debt.expand.debt_from.name}
+								</small>
+								<small>
+									Description: {debt.description}
+								</small>
 							</div>
-						{:else}
-							<div style="display: flex; align-items: center; gap: 0.5em;">
-								<img
-									class="avatar"
-									alt="avatar"
-									width="50px"
-									src="https://api.dicebear.com/7.x/bottts/svg?seed={debt.expand.debt_to.id}"
-								/>
-								<div style="display: flex; flex-direction: column;">
-									<h3>${(debt.cost / 100).toFixed(2)}</h3>
-									<small>
-										To:
-										{debt.expand.debt_to.name}
-									</small>
-									<small>
-										Description: {debt.description}
-									</small>
-								</div>
-							</div>
-						{/if}
-						<div class="pay">
-							{#if debt.status === 'completed'}
-								<h3>Resolved</h3>
-							{:else if debt.status == 'pending'}
-								<h3>Pending</h3>
-							{:else if !(debt.expand.debt_to.id === $currentUser?.id)}
-								<button
-									type="button"
-									on:click={() => {
-										selectedDebt = debt.id;
-										payDebtModal = true;
-									}}>Pay</button
-								>
-							{/if}
-							{new Date(debt.created).toDateString()}
 						</div>
+					{:else}
+						<div style="display: flex; align-items: center; gap: 0.5em;">
+							<img
+								class="avatar"
+								alt="avatar"
+								width="50px"
+								src="https://api.dicebear.com/7.x/bottts/svg?seed={debt.expand.debt_to.id}"
+							/>
+							<div style="display: flex; flex-direction: column;">
+								<h3>${(debt.cost / 100).toFixed(2)}</h3>
+								<small>
+									To:
+									{debt.expand.debt_to.name}
+								</small>
+								<small>
+									Description: {debt.description}
+								</small>
+							</div>
+						</div>
+					{/if}
+					<div class="pay">
+						{#if debt.status === 'completed'}
+							<h3>Resolved</h3>
+						{:else if debt.status == 'pending'}
+							<h3>Pending</h3>
+						{:else if !(debt.expand.debt_to.id === $currentUser?.id)}
+							<button
+								type="button"
+								on:click={() => {
+									selectedDebt = debt.id;
+									payDebtModal = true;
+								}}>Pay</button
+							>
+						{/if}
+						{new Date(debt.created).toDateString()}
 					</div>
-				{/each}
-			</div>
+				</div>
+			{/each}
+		</div>
 
-			<DebtModal bind:data bind:newDebtModal {friends} />
-			<PaymentModal bind:data {selectedDebt} bind:payDebtModal />
+		<DebtModal bind:data bind:newDebtModal {friends} />
+		<PaymentModal bind:data {selectedDebt} bind:payDebtModal />
 
-			<div class="add">
-				<button type="button" style="all:unset;" on:click={() => (newDebtModal = true)}>
-					<Add size={50} />
-				</button>
-			</div>
+		<div class="add">
+			<button type="button" style="all:unset;" on:click={() => (newDebtModal = true)}>
+				<Add size={50} />
+			</button>
 		</div>
 	{/if}
 {/await}

@@ -14,7 +14,7 @@
 		sender: string;
 		reciever: string;
 	}) => {
-		const reponse = await fetch('/api/accept', {
+		const reponse = await fetch('/api/acceptFriend', {
 			method: 'post',
 			body: JSON.stringify({ id, accept, sender, reciever })
 		});
