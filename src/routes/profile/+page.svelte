@@ -98,7 +98,7 @@
 					name="friend_id"
 					bind:value={$form.friend_id}
 					placeholder="Friend ID"
-					aria-invalid={$errors.friend_id ? 'true' : undefined}
+					style={$errors.friend_id && 'border:2px solid rgb(232, 174, 174)'}
 				/>
 				{#if $errors.friend_id}<p class="invalid">{$errors.friend_id}</p>{/if}
 			</div>

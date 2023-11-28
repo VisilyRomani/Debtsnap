@@ -36,7 +36,7 @@
 	<form on:submit|preventDefault={login} class="login-container">
 		<div class="header">
 			<h1 style="margin: 0;">Welcome 🤟</h1>
-			<h4 style="margin: 0;">Login to Svelte Debt</h4>
+			<h4 style="margin: 0;">Login to DebtSnap</h4>
 		</div>
 		<div class="input-container">
 			<input
