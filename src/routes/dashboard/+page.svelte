@@ -43,11 +43,12 @@
 	});
 
 	const sortAndFilter = async () => {
-		const sortedDebts = ((await getAllDebt()) ?? []).sort((a, b) =>
+		const debt = await getAllDebt();
+		const sortedDebts = (debt ?? []).sort((a, b) =>
 			a.status === b.status ? 0 : a.status === 'completed' ? 1 : 0
 		);
 		const amountOwed =
-			(await debts)
+			debt
 				?.filter((d) => !(d.status === 'completed'))
 				.reduce((acc, cur) => {
 					return acc + (cur.expand.debt_to.id !== $currentUser?.id ? cur.cost : 0);
