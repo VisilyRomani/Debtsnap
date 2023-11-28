@@ -45,7 +45,7 @@
 
 	const sortAndFilter = async (debts: Promise<TDebt[]>) => {
 		const sortedDebts = ((await debts) ?? []).sort((a, b) =>
-			a.status === b.status ? 0 : a.status === 'completed' ? 1 : -1
+			a.status === b.status ? 0 : a.status === 'completed' ? 1 : 0
 		);
 		const amountOwed =
 			(await debts)
