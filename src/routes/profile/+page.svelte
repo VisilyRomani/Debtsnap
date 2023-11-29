@@ -31,7 +31,7 @@
 	$: showModal && reset();
 
 	let friends: TUser;
-	let requests: { id: string; sender_id: string; name: string }[];
+	let requests: { id: string; sender_id: string; name: string; username: string }[];
 
 	pb.collection('users').subscribe('*', async () => {
 		friends = await getFriends($currentUser?.id ?? '');
@@ -58,7 +58,7 @@
 			class="profile-header"
 			on:click={async () => {
 				try {
-					await navigator.clipboard.writeText($currentUser?.id ?? '');
+					await navigator.clipboard.writeText($currentUser?.username ?? '');
 					toast.success('Copied Id');
 				} catch (e) {
 					toast.error('Failed to copy Id');
@@ -69,7 +69,7 @@
 				class="avatar"
 				alt="avatar"
 				width="50px"
-				src="https://api.dicebear.com/7.x/bottts/svg?seed={$currentUser?.id}"
+				src="https://api.dicebear.com/7.x/bottts/svg?seed={$currentUser?.username}"
 			/>
 			<div class="name">
 				<h3>

@@ -9,7 +9,7 @@
 		<img
 			alt="avatar"
 			width="50px"
-			src="https://api.dicebear.com/7.x/bottts/svg?seed={friend?.id}"
+			src="https://api.dicebear.com/7.x/bottts/svg?seed={friend?.username}"
 		/>
 		<div class="name">
 			<h3>{friend.name}</h3>

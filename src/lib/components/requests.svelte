@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { currentUser } from '$lib/pocketbase';
 	import { fly } from 'svelte/transition';
-	export let requests: { name: string; id: string; sender_id: string }[] = [];
+	export let requests: { name: string; id: string; sender_id: string; username: string }[] = [];
 
 	const requestReponse = async ({
 		id,
@@ -28,8 +28,9 @@
 			<img
 				alt="avatar"
 				width="50px"
-				src="https://api.dicebear.com/7.x/bottts/svg?seed={request?.sender_id}"
+				src="https://api.dicebear.com/7.x/bottts/svg?seed={request?.username}"
 			/>
+
 			<div class="name">
 				<h3>{request.name}</h3>
 				<small>

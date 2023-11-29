@@ -1,7 +1,7 @@
 import { fail } from '@sveltejs/kit';
 import z from 'zod';
 import { setError, superValidate } from 'sveltekit-superforms/server';
-export type TUser = { id: string; name: string }[];
+export type TUser = { id: string; name: string; username: string }[];
 
 const validateFriend = z.object({
 	id: z.string().min(1),
