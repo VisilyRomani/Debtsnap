@@ -30,7 +30,7 @@ export const actions = {
 				await locals.server_pb
 					.collection('users')
 					.getOne<{ friends: string[] }>(friendForm.data.id, { fields: 'friends' })
-			).friends.length;
+			).friends.find((friend_id) => friend_id === friendForm.data.friend_id);
 
 			if (isFriend) {
 				return setError(friendForm, 'friend_id', 'User already a friend');
