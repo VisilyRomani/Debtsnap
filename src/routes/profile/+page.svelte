@@ -30,8 +30,8 @@
 
 	$: showModal && reset();
 
-	let friends: TUser;
-	let requests: { id: string; sender_id: string; name: string; username: string }[];
+	let friends: TUser = [];
+	let requests: { id: string; sender_id: string; name: string; username: string }[] = [];
 
 	pb.collection('users').subscribe('*', async () => {
 		friends = await getFriends($currentUser?.id ?? '');
@@ -46,8 +46,8 @@
 	});
 
 	onDestroy(() => {
-		pb.collection('users').unsubscribe('friends');
-		pb.collection('friend_request').unsubscribe('reciever');
+		pb.collection('users').unsubscribe();
+		pb.collection('friend_request').unsubscribe();
 	});
 </script>
 
@@ -86,10 +86,10 @@
 	</div>
 	<div style="width:100%; ">
 		{#if !!requests?.length}
-			<Requests {requests} />
+			<Requests bind:requests />
 			<hr style="width: 90%;" />
 		{/if}
-		<Friends {friends} />
+		<Friends bind:friends />
 	</div>
 </div>
 <button on:click={() => pb.authStore.clear()}>Log Out</button>
