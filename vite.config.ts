@@ -5,6 +5,8 @@ import { VitePWA } from 'vite-plugin-pwa';
 export default defineConfig({
 	plugins: [
 		VitePWA({
+			injectRegister: 'auto',
+			registerType: 'autoUpdate',
 			includeAssets: ['icon.png', 'favicon.svg'],
 			manifest: {
 				name: 'DebtSnap',
