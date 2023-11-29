@@ -30,7 +30,7 @@
 			expand: 'debt_from, debt_to, debt_confirm(debt)',
 			sort: '-created',
 			fields:
-				'id, cost, created, description, status, expand.debt_from.name, expand.debt_from.id, expand.debt_to.name, expand.debt_to.id, expand.debt_confirm(debt).payment_details'
+				'id, cost, created, description, status, expand.debt_from.name, expand.debt_from.id, expand.debt_to.name,expand.debt_to.username,expand.debt_from.username, expand.debt_to.id, expand.debt_confirm(debt).payment_details'
 		});
 	};
 
@@ -98,7 +98,7 @@
 						class="avatar"
 						alt="avatar"
 						width="50px"
-						src="https://api.dicebear.com/7.x/bottts/svg?seed={debt.expand.debt_from.id}"
+						src="https://api.dicebear.com/7.x/bottts/svg?seed={debt.expand.debt_from.username}"
 					/>
 					<div style="display: flex; flex-direction: column;">
 						<h3>${(debt.cost / 100).toFixed(2)}</h3>
@@ -117,7 +117,7 @@
 						class="avatar"
 						alt="avatar"
 						width="50px"
-						src="https://api.dicebear.com/7.x/bottts/svg?seed={debt.expand.debt_to.id}"
+						src="https://api.dicebear.com/7.x/bottts/svg?seed={debt.expand.debt_to.username}"
 					/>
 					<div style="display: flex; flex-direction: column;">
 						<h3>${(debt.cost / 100).toFixed(2)}</h3>

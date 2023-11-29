@@ -12,10 +12,12 @@ export type TDebt = {
 		'debt_confirm(debt)': { payment_details: string }[];
 		debt_from: {
 			name: string;
+			username: string;
 			id: string;
 		};
 		debt_to: {
 			name: string;
+			username: string;
 			id: string;
 		};
 	};
