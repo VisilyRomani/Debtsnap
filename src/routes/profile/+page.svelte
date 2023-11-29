@@ -58,7 +58,7 @@
 			class="profile-header"
 			on:click={async () => {
 				try {
-					await navigator.clipboard.writeText($currentUser?.username ?? '');
+					await navigator.clipboard.writeText($currentUser?.id ?? '');
 					toast.success('Copied Id');
 				} catch (e) {
 					toast.error('Failed to copy Id');

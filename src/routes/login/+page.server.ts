@@ -27,7 +27,9 @@ export const actions = {
 			return { signupForm };
 		}
 		try {
-			await locals.server_pb.collection('users').create(signupForm.data);
+			await locals.server_pb
+				.collection('users')
+				.create({ ...signupForm.data, email: signupForm.data.email.toLocaleLowerCase() });
 			return { signupForm };
 		} catch (err) {
 			if (err instanceof Error) {

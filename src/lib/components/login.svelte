@@ -18,7 +18,7 @@
 				loginError = 'Fields are required';
 				return;
 			}
-			await pb.collection('users').authWithPassword(username, password);
+			await pb.collection('users').authWithPassword(username.toLocaleLowerCase(), password);
 			goto('/dashboard');
 		} catch (error) {
 			if (error instanceof ClientResponseError) {
