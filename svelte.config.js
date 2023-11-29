@@ -17,7 +17,7 @@ const config = {
 		// See https://kit.svelte.dev/docs/adapters for more information about adapters.
 		adapter: adapter(),
 		files: {
-			serviceWorker: 'src/my-sw.ts', // or `src/my-sw.ts`
+			serviceWorker: 'src/service-worker.ts', // or `src/my-sw.ts`
 		  }
 	}
 };
