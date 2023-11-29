@@ -38,7 +38,9 @@ button:hover {
 	cursor: pointer;
 }
 
-input, textarea, select{
+input,
+textarea,
+select {
 	all: unset;
 	box-sizing: border-box;
 	border-radius: 0.4em;
@@ -47,12 +49,12 @@ input, textarea, select{
 	width: 100%;
 	box-shadow: 0px 0px 2px var(--light-text);
 	transition: all 0.3s;
-	
 }
-input:focus, textarea:focus, select {
+input:focus,
+textarea:focus,
+select {
 	box-shadow: 0px 0px 3px var(--dark-text);
 }
-  
 
 h1,
 h2,
@@ -81,20 +83,23 @@ a {
 	fill: var(--light-text);
 }
 
-
 .loader {
 	border: 16px solid var(--light-text);
-	border-top: 16px solid var(--light-secondary); 
+	border-top: 16px solid var(--light-secondary);
 	border-radius: 50%;
 	width: 100px;
 	height: 100px;
 	animation: spin 1s linear infinite;
-  }
-  
-  @keyframes spin {
-	0% { transform: rotate(0deg); }
-	100% { transform: rotate(360deg); }
-  }
+}
+
+@keyframes spin {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
 
 /* width */
 ::-webkit-scrollbar {
@@ -110,14 +115,14 @@ a {
 ::-webkit-scrollbar-thumb {
 	border-radius: 1em;
 	background: #888;
-  }
-  
-  /* Handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
-	background: #555;
-  }
+}
 
-  .error-response {
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+	background: #555;
+}
+
+.error-response {
 	color: rgb(175, 56, 56);
 	background-color: rgb(232, 174, 174);
 	padding: 0.2em;
@@ -125,22 +130,21 @@ a {
 	border-radius: 0.4em;
 }
 
-
-.modal-button-container{
+.modal-button-container {
 	display: flex;
 	flex-direction: row;
-	gap:1em;
+	gap: 1em;
 }
 
 .full-screen {
-	display:flex;
+	display: flex;
 	height: 100%;
 	justify-content: center;
 	align-items: center;
 }
 
 /* Animate  */
-.dot{
+.dot {
 	display: inline-block;
 }
 .dot:nth-child(1) {

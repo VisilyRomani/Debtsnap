@@ -4,33 +4,28 @@
 	export let friends: TUser = [];
 </script>
 
-<div class="friends">
-	{#each friends as friend, idx (idx)}
-		<div class="profile-header" transition:fly={{ y: 100, duration: 500, delay: idx * 150 }}>
-			<img
-				alt="avatar"
-				width="50px"
-				src="https://api.dicebear.com/7.x/bottts/svg?seed={friend?.id}"
-			/>
-			<div class="name">
-				<h3>{friend.name}</h3>
-				<small>
-					id:{friend.id}
-				</small>
-			</div>
+{#each friends as friend, idx (idx)}
+	<div class="profile-header" transition:fly={{ y: 100, duration: 500, delay: idx * 150 }}>
+		<img
+			alt="avatar"
+			width="50px"
+			src="https://api.dicebear.com/7.x/bottts/svg?seed={friend?.id}"
+		/>
+		<div class="name">
+			<h3>{friend.name}</h3>
+			<small>
+				id:{friend.id}
+			</small>
 		</div>
-	{/each}
-</div>
+	</div>
+{/each}
 
 <style>
-	.friends {
-		width: 100%;
-		overflow-y: auto;
-	}
 	.profile-header {
-		padding: 0.5em;
 		display: flex;
 		text-align: center;
+		border-radius: 0.5em;
+		padding: 0.5em;
 		gap: 1em;
 	}
 	.name {

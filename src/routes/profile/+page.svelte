@@ -11,7 +11,6 @@
 	import toast from 'svelte-french-toast';
 	import { getFriendRequests, getFriends } from '$lib/functions/friend';
 
-	let showRequest = false;
 	let showModal = false;
 	export let data: PageData;
 
@@ -54,48 +53,44 @@
 
 <div class="container">
 	<h1>Profile</h1>
-	<button
-		class="profile-header"
-		on:click={async () => {
-			try {
-				await navigator.clipboard.writeText($currentUser?.id ?? '');
-				toast.success('Copied Id');
-			} catch (e) {
-				toast.error('Failed to copy Id');
-			}
-		}}
-	>
-		<img
-			class="avatar"
-			alt="avatar"
-			width="50px"
-			src="https://api.dicebear.com/7.x/bottts/svg?seed={$currentUser?.id}"
-		/>
-		<div class="name">
-			<h3>
-				{$currentUser?.name}
-			</h3>
-			<small>
-				id:{$currentUser?.id}
-			</small>
-		</div>
-	</button>
-	<hr />
-	<div class="multi-select">
-		<button type="button" class="multi-button" on:click={() => (showRequest = false)}>
-			<h2 style={!showRequest ? 'color:var(--light-text)' : ''}>Friends</h2>
+	<div class="header-container">
+		<button
+			class="profile-header"
+			on:click={async () => {
+				try {
+					await navigator.clipboard.writeText($currentUser?.id ?? '');
+					toast.success('Copied Id');
+				} catch (e) {
+					toast.error('Failed to copy Id');
+				}
+			}}
+		>
+			<img
+				class="avatar"
+				alt="avatar"
+				width="50px"
+				src="https://api.dicebear.com/7.x/bottts/svg?seed={$currentUser?.id}"
+			/>
+			<div class="name">
+				<h3>
+					{$currentUser?.name}
+				</h3>
+				<small>
+					id:{$currentUser?.id}
+				</small>
+			</div>
 		</button>
-		<button type="button" class="multi-button" on:click={() => (showRequest = true)}>
-			<h2 style={showRequest ? 'color:var(--light-text)' : ''}>Requests</h2>
+		<button style="width: fit-content; margin:1em;" on:click={() => (showModal = true)}>
+			Add Friend
 		</button>
 	</div>
-	<hr style="width: 90%;" />
-	{#if showRequest}
-		<button style="width: 90%;" on:click={() => (showModal = true)}> Add Friend </button>
-		<Requests {requests} />
-	{:else}
+	<div style="width:100%; ">
+		{#if !!requests?.length}
+			<Requests {requests} />
+			<hr style="width: 90%;" />
+		{/if}
 		<Friends {friends} />
-	{/if}
+	</div>
 </div>
 <button on:click={() => pb.authStore.clear()}>Log Out</button>
 
@@ -120,21 +115,13 @@
 </Modal>
 
 <style>
-	.multi-select {
+	.header-container {
 		display: flex;
+		justify-content: space-between;
 		width: 100%;
-		justify-content: space-around;
-		color: var(--dark-text);
+		border-radius: 0.5em;
+		box-shadow: 1px 1px 1px 1px gray;
 	}
-	.multi-button {
-		color: inherit;
-		background-color: inherit;
-	}
-
-	.multi-button:hover {
-		color: var(--light-text);
-	}
-
 	.friend-container {
 		display: flex;
 		gap: 1em;
@@ -146,12 +133,15 @@
 		height: 100%;
 		margin: 0em 1em 0em 1em;
 		padding-top: 1em;
+		gap: 1em;
 	}
 	.profile-header {
 		margin: 0.5em;
-		width: 100%;
+		width: fit-content;
 		display: flex;
-		text-align: center;
+		background-color: inherit;
+		color: var(--dark-text);
+		/* text-align: center; */
 		gap: 1em;
 	}
 	.name {
