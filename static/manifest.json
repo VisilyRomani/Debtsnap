@@ -21,6 +21,6 @@
     "lang": "en-CA",
     "name": "DebtSnap",
     "short_name": "DebtSnap",
-    "start_url": "https://svelte-debt.pages.dev/dashboard",
+    "start_url": "https://svelte-debt.pages.dev",
     "description": "Streamline your finances with our debt tracking app - effortlessly manage IOUs and split expenses among friends."
   }
