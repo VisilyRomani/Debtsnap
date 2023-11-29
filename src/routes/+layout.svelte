@@ -1,23 +1,45 @@
 <script lang="ts">
 	import '../global.css';
-	import { onMount } from 'svelte';
-	import { pb } from '$lib/pocketbase';
+	import { onDestroy, onMount } from 'svelte';
+	import { currentUser, pb } from '$lib/pocketbase';
 	import { goto } from '$app/navigation';
 	import { Toaster } from 'svelte-french-toast';
 	import Home from '$lib/icons/home.svelte';
 	import Friends from '$lib/icons/friends.svelte';
 	import Validate from '$lib/icons/validate.svelte';
 	import { page } from '$app/stores';
+	import { getDebtConfirmCount } from '$lib/functions/debt';
+
+	$: confirmCount = 0;
 
 	onMount(async () => {
 		try {
-			pb.authStore.isValid && (await pb.collection('users').authRefresh());
+			if (pb.authStore.isValid) {
+				await pb.collection('users').authRefresh();
+			} else {
+				pb.authStore.clear();
+				goto('/login');
+			}
 		} catch (error) {
 			pb.authStore.clear();
-		}
-		if (!pb.authStore.isValid) {
 			goto('/login');
 		}
+
+		await updateConfirmCount();
+	});
+
+	onDestroy(() => {
+		pb.collection('debt_confirm').unsubscribe();
+	});
+
+	const updateConfirmCount = async () => {
+		confirmCount = await getDebtConfirmCount($currentUser?.id ?? '');
+	};
+
+	$: $currentUser?.id && updateConfirmCount();
+
+	pb.collection('debt_confirm').subscribe('*', async () => {
+		updateConfirmCount();
 	});
 </script>
 
@@ -29,7 +51,12 @@
 		<nav class="bottom-nav">
 			<a href="/confirm">
 				<div class="icon">
-					<Validate size={30} />
+					<div class="validate">
+						<Validate size={30} />
+						{#if confirmCount}
+							<span id="confirm-count">{confirmCount}</span>
+						{/if}
+					</div>
 					Confirm
 				</div>
 			</a>
@@ -53,11 +80,29 @@
 <Toaster />
 
 <style>
+	.validate {
+		position: relative;
+	}
+	#confirm-count {
+		position: absolute;
+		top: 0px;
+		right: -5px;
+		line-height: 15px;
+		height: 15px;
+		width: 15px;
+		font-size: 10px;
+		text-align: center;
+		color: white;
+		border-radius: 100%;
+		background-color: rgb(255, 60, 60);
+	}
+
 	.icon {
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
+		position: relative;
 	}
 	.content {
 		display: flex;
@@ -77,6 +122,9 @@
 	a:hover {
 		color: var(--light-text);
 		fill: var(--light-text);
+	}
+	a:hover #confirm-count {
+		background-color: rgb(255, 160, 160);
 	}
 
 	.nav_container {

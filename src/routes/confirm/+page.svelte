@@ -1,27 +1,13 @@
 <script lang="ts">
+	import { getDebtConfirm, type TDebtConfirm } from '$lib/functions/debt';
 	import { currentUser, pb } from '$lib/pocketbase';
 	import { onDestroy, onMount } from 'svelte';
+	import Box from '$lib/icons/box.svelte';
 
-	type TDebtConfirm = {
-		id: string;
-		payment_details: string;
-		expand: {
-			debt: {
-				cost: number;
-				description: string;
-				id: string;
-				expand: {
-					debt_from: {
-						name: string;
-					};
-				};
-			};
-		};
-	};
 	let debt_confirms: TDebtConfirm[] = [];
 
 	onMount(async () => {
-		debt_confirms = await getDebtConfirm();
+		debt_confirms = await getDebtConfirm($currentUser?.id ?? '');
 	});
 
 	onDestroy(() => {
@@ -29,16 +15,8 @@
 	});
 
 	pb.collection('debt_confirm').subscribe('*', async () => {
-		debt_confirms = await getDebtConfirm();
+		debt_confirms = await getDebtConfirm($currentUser?.id ?? '');
 	});
-	const getDebtConfirm = () => {
-		return pb.collection('debt_confirm').getFullList<TDebtConfirm>({
-			expand: 'debt, debt.debt_from',
-			fields:
-				'payment_details, id, expand.debt.id, expand.debt.cost, expand.debt.expand.debt_from.name, expand.debt.description',
-			filter: `(debt.debt_to="${$currentUser?.id}" && debt.status!='completed')`
-		});
-	};
 
 	const requestReponse = async ({
 		id,
@@ -53,22 +31,19 @@
 			method: 'post',
 			body: JSON.stringify({ id, debt_id, accept })
 		});
-		debt_confirms = await getDebtConfirm();
+		debt_confirms = await getDebtConfirm($currentUser?.id ?? '');
 	};
 </script>
 
 <div class="header-container">
 	<h1>Debt Confirmation</h1>
+	<hr style="width:90%;" />
 </div>
 
 {#if !debt_confirms.length}
-	<div class="full-screen">
-		<h3>
-			Nothing to confirm
-			<span class="dot">.</span>
-			<span class="dot">.</span>
-			<span class="dot">.</span>
-		</h3>
+	<div class="empty">
+		<Box size={100} />
+		<h3>NO ITEMS TO CONFIRM</h3>
 	</div>
 {/if}
 
@@ -132,5 +107,14 @@
 	.confirm-container {
 		overflow-y: auto;
 		flex: 1 1 auto;
+	}
+	.empty {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		height: 100%;
+		fill: var(--light-text);
+		color: var(--light-text);
+		flex-direction: column;
 	}
 </style>

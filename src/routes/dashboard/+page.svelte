@@ -21,7 +21,7 @@
 	});
 
 	onDestroy(() => {
-		pb.collection('debts').unsubscribe();
+		pb.collection('debt').unsubscribe();
 		clearTimeout(timeout);
 	});
 
@@ -38,9 +38,11 @@
 		debts = await getAllDebt();
 	});
 
-	$: sortedDebts = (debts ?? []).filter((d) =>
-		isActive ? d.status !== 'completed' : d.status === 'completed'
-	);
+	$: sortedDebts = (debts ?? [])
+		.filter((d) => (isActive ? d.status !== 'completed' : d.status === 'completed'))
+		.sort((a, b) =>
+			a.status === 'requested' && a.expand.debt_to.id !== ($currentUser?.id ?? '') ? -1 : 0
+		);
 
 	$: amountOwed =
 		(debts ?? [])
@@ -137,20 +139,24 @@
 				</div>
 			{/if}
 			<div class="pay">
-				{#if debt.status === 'completed'}
-					<h3>Resolved</h3>
-				{:else if debt.status == 'pending'}
-					<h3>Pending</h3>
-				{:else if !(debt.expand.debt_to.id === $currentUser?.id)}
-					<button
-						type="button"
-						on:click={() => {
-							selectedDebt = debt.id;
-							payDebtModal = true;
-						}}>Pay</button
-					>
-				{/if}
-				{new Date(debt.created).toDateString()}
+				<p>
+					{new Date(debt.created).toLocaleString()}
+				</p>
+				<div class="grid-section">
+					{#if debt.status === 'completed'}
+						<h3>Resolved</h3>
+					{:else if debt.status == 'pending'}
+						<h3>Pending</h3>
+					{:else if !(debt.expand.debt_to.id === $currentUser?.id)}
+						<button
+							type="button"
+							on:click={() => {
+								selectedDebt = debt.id;
+								payDebtModal = true;
+							}}>Pay</button
+						>
+					{/if}
+				</div>
 			</div>
 		</div>
 	{/each}
@@ -180,9 +186,19 @@
 	}
 	/* Main Dashboard  */
 	.pay {
-		display: flex;
-		flex-direction: column;
+		display: grid;
+		height: 100%;
+		grid-template-rows: 1fr 1fr;
+		align-self: self-end;
 		justify-content: center;
+		text-align: center;
+	}
+
+	.grid-section {
+		display: flex;
+		justify-content: center;
+		height: 100%;
+		widows: 100%;
 		align-items: center;
 	}
 	.amount-header {

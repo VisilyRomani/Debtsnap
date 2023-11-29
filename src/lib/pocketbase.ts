@@ -16,6 +16,7 @@ export const currentUser = writable<TUser>((pb.authStore.model as TUser) ?? unde
 
 pb.authStore.onChange(() => {
 	if (!pb.authStore.isValid) {
+		currentUser.set(undefined);
 		goto('/login');
 	}
 	currentUser.set((pb.authStore.model as TUser) ?? undefined);

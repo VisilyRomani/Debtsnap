@@ -30,6 +30,10 @@
 	{#await friendsList then friends}
 		<div>
 			<h3>Add New Debt</h3>
+
+			{#if !friends.length}
+				<p class="error-response">You cannot create a debt without friends</p>
+			{/if}
 			<form class="debt-container" use:enhance method="post" action="/dashboard?/newDebt">
 				{#if $errors.debt_to}
 					<p class="error-response">{$errors.debt_to}</p>
@@ -40,6 +44,7 @@
 						placeholder="Description"
 						autocomplete="off"
 						name="description"
+						disabled={!friends.length}
 						style={$errors.description && 'border:2px solid rgb(232, 174, 174)'}
 						bind:value={$form.description}
 					/>
@@ -51,6 +56,7 @@
 					<select
 						name="debt_from"
 						bind:value={$form.debt_from}
+						disabled={!friends.length}
 						style={$errors.debt_from && 'border:2px solid rgb(232, 174, 174)'}
 					>
 						<option value="" selected disabled hidden>Select Friend</option>
@@ -67,6 +73,7 @@
 						name="cost"
 						type="number"
 						step="0.01"
+						disabled={!friends.length}
 						placeholder="Amount Owed"
 						bind:value={$form.cost}
 						style={$errors.cost && 'border:2px solid rgb(232, 174, 174)'}
@@ -75,7 +82,7 @@
 						<p class="error-response">{$errors.cost}</p>
 					{/if}
 				</div>
-				<button>Submit</button>
+				<button disabled={!friends.length}>Submit</button>
 			</form>
 		</div>
 	{/await}
@@ -85,6 +92,9 @@
 	.debt-container {
 		display: flex;
 		flex-direction: column;
-		gap: 1em;
+		gap: 0.5em;
+	}
+	h3 {
+		margin-bottom: 1em;
 	}
 </style>
