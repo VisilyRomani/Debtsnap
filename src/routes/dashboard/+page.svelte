@@ -1,27 +1,23 @@
 <script lang="ts">
-	import { getFriends } from '$lib/functions/friend';
 	import Add from '$lib/icons/add.svelte';
 	import { currentUser, pb } from '$lib/pocketbase';
 	import { onDestroy, onMount } from 'svelte';
 	import { fade, fly } from 'svelte/transition';
-	import type { TUser } from '../profile/+page.server';
 	import type { PageData } from './$types';
 	import DebtModal from '$lib/components/modal/DebtModal.svelte';
 	import PaymentModal from '$lib/components/modal/PaymentModal.svelte';
 	import type { TDebt } from './+page.server';
-	import { delay } from '$lib/functions/helper';
 
-	let debts: Promise<TDebt[]>;
-	let friends: TUser = [];
+	let isActive = true;
+	let debts: TDebt[] = [];
 	let newDebtModal = false;
 	let payDebtModal = false;
 	let timeout: ReturnType<typeof setTimeout>;
-	let visible = false;
 	let selectedDebt: string;
 	export let data: PageData;
 
 	onMount(async () => {
-		debts = getAllDebt();
+		debts = await getAllDebt();
 	});
 
 	onDestroy(() => {
@@ -39,23 +35,19 @@
 	};
 
 	pb.collection('debt').subscribe('*', async () => {
-		debts = getAllDebt();
+		debts = await getAllDebt();
 	});
 
-	const sortAndFilter = async (debts: Promise<TDebt[]>) => {
-		const sortedDebts = ((await debts) ?? []).sort((a, b) =>
-			a.status === b.status ? 0 : a.status === 'completed' ? 1 : 0
-		);
-		const amountOwed =
-			(await debts)
-				?.filter((d) => !(d.status === 'completed'))
-				.reduce((acc, cur) => {
-					return acc + (cur.expand.debt_to.id !== $currentUser?.id ? cur.cost : 0);
-				}, 0) ?? 0;
-		// await delay(500);
+	$: sortedDebts = (debts ?? []).filter((d) =>
+		isActive ? d.status !== 'completed' : d.status === 'completed'
+	);
 
-		return { sortedDebts, amountOwed };
-	};
+	$: amountOwed =
+		(debts ?? [])
+			?.filter((d) => !(d.status === 'completed'))
+			.reduce((acc, cur) => {
+				return acc + (cur.expand.debt_to.id !== $currentUser?.id ? cur.cost : 0);
+			}, 0) ?? 0;
 
 	const statusColor = (status: string) => {
 		switch (status) {
@@ -72,107 +64,120 @@
 </script>
 
 <!-- Main body -->
-{#await sortAndFilter(debts)}
-	<div class="full-screen">
-		<div out:fade={{ duration: 100 }} class="loader" on:outroend={() => (visible = true)}></div>
+
+<div class="total-container">
+	<div class="amount-header">
+		<h2>Total Amount You Owe</h2>
+		<h1>${(amountOwed / 100).toFixed(2)}</h1>
 	</div>
-{:then value}
-	{#if visible}
-		<div class="total-container">
-			<div class="amount-header">
-				<h2>Total Amount You Owe</h2>
-				<h1>${(value.amountOwed / 100).toFixed(2)}</h1>
-			</div>
-		</div>
-		<div class="friend-container">
-			{#each value.sortedDebts ?? [] as debt, idx (idx)}
-				<div
-					in:fly|global={{ y: 100, duration: 500, delay: idx * 150 + 101 }}
-					class="friend"
-					style={debt.expand.debt_to.id === $currentUser?.id
-						? 'border-left: 4px blue solid;'
-						: statusColor(debt.status)}
-				>
-					{#if debt.expand.debt_to.id === $currentUser?.id}
-						<div style="display: flex; align-items: center; gap: 0.5em;">
-							<img
-								class="avatar"
-								alt="avatar"
-								width="50px"
-								src="https://api.dicebear.com/7.x/bottts/svg?seed={debt.expand.debt_from.id}"
-							/>
-							<div style="display: flex; flex-direction: column;">
-								<h3>${(debt.cost / 100).toFixed(2)}</h3>
-								<small>
-									From:
-									{debt.expand.debt_from.name}
-								</small>
-								<small>
-									Description: {debt.description}
-								</small>
-							</div>
-						</div>
-					{:else}
-						<div style="display: flex; align-items: center; gap: 0.5em;">
-							<img
-								class="avatar"
-								alt="avatar"
-								width="50px"
-								src="https://api.dicebear.com/7.x/bottts/svg?seed={debt.expand.debt_to.id}"
-							/>
-							<div style="display: flex; flex-direction: column;">
-								<h3>${(debt.cost / 100).toFixed(2)}</h3>
-								<small>
-									To:
-									{debt.expand.debt_to.name}
-								</small>
-								<small>
-									Description: {debt.description}
-								</small>
-								{#if debt.status === 'completed'}
-									<small>
-										Payment: {debt.expand['debt_confirm(debt)'][0].payment_details}
-									</small>
-								{/if}
-							</div>
-						</div>
-					{/if}
-					<div class="pay">
-						{#if debt.status === 'completed'}
-							<h3>Resolved</h3>
-						{:else if debt.status == 'pending'}
-							<h3>Pending</h3>
-						{:else if !(debt.expand.debt_to.id === $currentUser?.id)}
-							<button
-								type="button"
-								on:click={() => {
-									selectedDebt = debt.id;
-									payDebtModal = true;
-								}}>Pay</button
-							>
-						{/if}
-						{new Date(debt.created).toDateString()}
+</div>
+<div class="tab-select">
+	<button
+		class="tab-button"
+		style={isActive ? 'border-bottom:2px solid var(--dark-text)' : ''}
+		on:click={() => (isActive = true)}>Active</button
+	>
+	<button
+		class="tab-button"
+		style={!isActive ? 'border-bottom:2px solid var(--dark-text)' : ''}
+		on:click={() => (isActive = false)}>Completed</button
+	>
+</div>
+<div class="debt-container">
+	{#each sortedDebts ?? [] as debt, idx (idx)}
+		<div
+			in:fly|global={{ y: 100, duration: 500, delay: idx * 150 + 101 }}
+			class="friend"
+			style={debt.expand.debt_to.id === $currentUser?.id
+				? 'border-left: 4px blue solid;'
+				: statusColor(debt.status)}
+		>
+			{#if debt.expand.debt_to.id === $currentUser?.id}
+				<div style="display: flex; align-items: center; gap: 0.5em;">
+					<img
+						class="avatar"
+						alt="avatar"
+						width="50px"
+						src="https://api.dicebear.com/7.x/bottts/svg?seed={debt.expand.debt_from.id}"
+					/>
+					<div style="display: flex; flex-direction: column;">
+						<h3>${(debt.cost / 100).toFixed(2)}</h3>
+						<small>
+							From:
+							{debt.expand.debt_from.name}
+						</small>
+						<small>
+							Description: {debt.description}
+						</small>
 					</div>
 				</div>
-			{/each}
+			{:else}
+				<div style="display: flex; align-items: center; gap: 0.5em;">
+					<img
+						class="avatar"
+						alt="avatar"
+						width="50px"
+						src="https://api.dicebear.com/7.x/bottts/svg?seed={debt.expand.debt_to.id}"
+					/>
+					<div style="display: flex; flex-direction: column;">
+						<h3>${(debt.cost / 100).toFixed(2)}</h3>
+						<small>
+							To:
+							{debt.expand.debt_to.name}
+						</small>
+						<small>
+							Description: {debt.description}
+						</small>
+						{#if debt.status === 'completed'}
+							<small>
+								Payment: {debt.expand['debt_confirm(debt)'][0].payment_details}
+							</small>
+						{/if}
+					</div>
+				</div>
+			{/if}
+			<div class="pay">
+				{#if debt.status === 'completed'}
+					<h3>Resolved</h3>
+				{:else if debt.status == 'pending'}
+					<h3>Pending</h3>
+				{:else if !(debt.expand.debt_to.id === $currentUser?.id)}
+					<button
+						type="button"
+						on:click={() => {
+							selectedDebt = debt.id;
+							payDebtModal = true;
+						}}>Pay</button
+					>
+				{/if}
+				{new Date(debt.created).toDateString()}
+			</div>
 		</div>
+	{/each}
+</div>
 
-		<div class="add">
-			<button
-				type="button"
-				style="all:unset;"
-				name="add debt"
-				on:click={() => (newDebtModal = true)}
-			>
-				<Add size={50} />
-			</button>
-		</div>
-	{/if}
-{/await}
+<div class="add">
+	<button type="button" style="all:unset;" name="add debt" on:click={() => (newDebtModal = true)}>
+		<Add size={50} />
+	</button>
+</div>
+
 <DebtModal bind:data bind:newDebtModal />
 <PaymentModal bind:data {selectedDebt} bind:payDebtModal />
 
 <style>
+	.tab-select {
+		display: flex;
+		padding: 1em;
+		gap: 1em;
+	}
+
+	.tab-button {
+		background-color: inherit;
+		color: var(--dark-text);
+		font-weight: bold;
+		border-radius: 0;
+	}
 	/* Main Dashboard  */
 	.pay {
 		display: flex;
@@ -188,7 +193,7 @@
 		padding: 1em;
 		gap: 0.5em;
 	}
-	.friend-container {
+	.debt-container {
 		width: 100%;
 		flex: 1 1 auto;
 		overflow-y: auto;
