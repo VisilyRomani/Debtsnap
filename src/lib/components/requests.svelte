@@ -34,7 +34,7 @@
 			<div class="name">
 				<h3>{request.name}</h3>
 				<small>
-					id:{request.id}
+					ID: {request.id}
 				</small>
 			</div>
 		</div>

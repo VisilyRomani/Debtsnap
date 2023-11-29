@@ -94,57 +94,58 @@
 				? 'border-left: 4px blue solid;'
 				: statusColor(debt.status)}
 		>
+			<img
+				class="avatar"
+				alt="avatar"
+				width="50px"
+				src="https://api.dicebear.com/7.x/bottts/svg?seed={debt.expand.debt_to.id ===
+				$currentUser?.id
+					? debt.expand.debt_from.username
+					: debt.expand.debt_to.username}"
+			/>
 			{#if debt.expand.debt_to.id === $currentUser?.id}
-				<div style="display: flex; align-items: center; gap: 0.5em;">
-					<img
-						class="avatar"
-						alt="avatar"
-						width="50px"
-						src="https://api.dicebear.com/7.x/bottts/svg?seed={debt.expand.debt_from.username}"
-					/>
-					<div style="display: flex; flex-direction: column;">
-						<h3>${(debt.cost / 100).toFixed(2)}</h3>
-						<small>
-							From:
-							{debt.expand.debt_from.name}
-						</small>
-						<small>
-							Description: {debt.description}
-						</small>
-					</div>
+				<div style="display: flex; flex-direction: column;">
+					<h3>${(debt.cost / 100).toFixed(2)}</h3>
+					<small>
+						From:
+						{debt.expand.debt_from.name}
+					</small>
+					<small>
+						Description: {debt.description}
+					</small>
 				</div>
 			{:else}
-				<div style="display: flex; align-items: center; gap: 0.5em;">
-					<img
-						class="avatar"
-						alt="avatar"
-						width="50px"
-						src="https://api.dicebear.com/7.x/bottts/svg?seed={debt.expand.debt_to.username}"
-					/>
-					<div style="display: flex; flex-direction: column;">
-						<h3>${(debt.cost / 100).toFixed(2)}</h3>
+				<div style="display: flex; flex-direction: column;">
+					<h3>${(debt.cost / 100).toFixed(2)}</h3>
+					<small>
+						To:
+						{debt.expand.debt_to.name}
+					</small>
+					<small>
+						Description: {debt.description}
+					</small>
+					{#if debt.status === 'completed'}
 						<small>
-							To:
-							{debt.expand.debt_to.name}
+							Payment: {debt.expand['debt_confirm(debt)'][0].payment_details}
 						</small>
-						<small>
-							Description: {debt.description}
-						</small>
-						{#if debt.status === 'completed'}
-							<small>
-								Payment: {debt.expand['debt_confirm(debt)'][0].payment_details}
-							</small>
-						{/if}
-					</div>
+					{/if}
 				</div>
 			{/if}
+
 			<div class="pay">
-				<p>
-					{new Date(debt.created).toLocaleString()}
-				</p>
+				<div>
+					<p>
+						{new Date(debt.created).toLocaleTimeString()}
+					</p>
+					<p>
+						{new Date(debt.created).toLocaleDateString()}
+					</p>
+				</div>
 				<div class="grid-section">
 					{#if debt.status === 'completed'}
 						<h3>Resolved</h3>
+					{:else if debt.status === 'requested'}
+						<h3>Requested</h3>
 					{:else if debt.status == 'pending'}
 						<h3>Pending</h3>
 					{:else if !(debt.expand.debt_to.id === $currentUser?.id)}
@@ -186,20 +187,19 @@
 	}
 	/* Main Dashboard  */
 	.pay {
+		/* width: 150px; */
+		/* height: 100%; */
+		width: fit-content;
 		display: grid;
-		height: 100%;
 		grid-template-rows: 1fr 1fr;
 		align-self: self-end;
 		justify-content: center;
 		text-align: center;
+		gap: 1em;
 	}
 
-	.grid-section {
-		display: flex;
-		justify-content: center;
-		height: 100%;
-		widows: 100%;
-		align-items: center;
+	p {
+		white-space: nowrap;
 	}
 	.amount-header {
 		display: flex;
@@ -215,8 +215,12 @@
 		overflow-y: auto;
 	}
 	.friend {
-		display: flex;
-		justify-content: space-between;
+		display: grid;
+		grid-template-columns: auto 1fr min-content;
+		/* justify-content: space-between; */
+		gap: 1em;
+		justify-items: start;
+		align-items: center;
 		background-color: var(--main-bg-color);
 		box-shadow: 0px 0px 5px 1px rgba(189, 189, 189, 0.527);
 		border-radius: 0.5em;

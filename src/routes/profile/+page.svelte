@@ -76,7 +76,7 @@
 					{$currentUser?.name}
 				</h3>
 				<small>
-					id:{$currentUser?.id}
+					ID: {$currentUser?.id}
 				</small>
 			</div>
 		</button>

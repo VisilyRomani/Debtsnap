@@ -22,7 +22,7 @@
 			<div class="name">
 				<h3>{friend.name}</h3>
 				<small>
-					id:{friend.id}
+					ID: {friend.id}
 				</small>
 			</div>
 		</div>
