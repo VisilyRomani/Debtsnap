@@ -33,10 +33,10 @@
 	let friends: TUser = [];
 	let requests: { id: string; sender_id: string; name: string; username: string }[] = [];
 
-	pb.collection('users').subscribe('*', async () => {
+	const unsubscribeFriends = pb.collection('users').subscribe('*', async () => {
 		friends = await getFriends($currentUser?.id ?? '');
 	});
-	pb.collection('friend_request').subscribe('*', async () => {
+	const unsubscribeFriendRequests = pb.collection('friend_request').subscribe('*', async () => {
 		requests = await getFriendRequests();
 	});
 
@@ -45,9 +45,9 @@
 		requests = await getFriendRequests();
 	});
 
-	onDestroy(() => {
-		pb.collection('users').unsubscribe();
-		pb.collection('friend_request').unsubscribe();
+	onDestroy(async () => {
+		(await unsubscribeFriends)();
+		(await unsubscribeFriendRequests)();
 	});
 </script>
 

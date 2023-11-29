@@ -10,11 +10,11 @@
 		debt_confirms = await getDebtConfirm($currentUser?.id ?? '');
 	});
 
-	onDestroy(() => {
-		pb.collection('debt_confirm').unsubscribe();
+	onDestroy(async () => {
+		(await unsubscribeConfirm)();
 	});
 
-	pb.collection('debt_confirm').subscribe('*', async () => {
+	const unsubscribeConfirm = pb.collection('debt_confirm').subscribe('*', async () => {
 		debt_confirms = await getDebtConfirm($currentUser?.id ?? '');
 	});
 

@@ -12,7 +12,6 @@
 	let debts: TDebt[] = [];
 	let newDebtModal = false;
 	let payDebtModal = false;
-	let timeout: ReturnType<typeof setTimeout>;
 	let selectedDebt: string;
 	export let data: PageData;
 
@@ -20,9 +19,8 @@
 		debts = await getAllDebt();
 	});
 
-	onDestroy(() => {
-		pb.collection('debt').unsubscribe();
-		clearTimeout(timeout);
+	onDestroy(async () => {
+		(await unsubscribtDebt)();
 	});
 
 	const getAllDebt = (): Promise<TDebt[]> => {
@@ -34,7 +32,7 @@
 		});
 	};
 
-	pb.collection('debt').subscribe('*', async () => {
+	const unsubscribtDebt = pb.collection('debt').subscribe('*', async () => {
 		debts = await getAllDebt();
 	});
 
@@ -187,12 +185,9 @@
 	}
 	/* Main Dashboard  */
 	.pay {
-		/* width: 150px; */
-		/* height: 100%; */
 		width: fit-content;
 		display: grid;
 		grid-template-rows: 1fr 1fr;
-		align-self: self-end;
 		justify-content: center;
 		text-align: center;
 		gap: 1em;
@@ -217,7 +212,6 @@
 	.friend {
 		display: grid;
 		grid-template-columns: auto 1fr min-content;
-		/* justify-content: space-between; */
 		gap: 1em;
 		justify-items: start;
 		align-items: center;
