@@ -3,6 +3,7 @@
 	import { currentUser, pb } from '$lib/pocketbase';
 	import { onDestroy, onMount } from 'svelte';
 	import Box from '$lib/icons/box.svelte';
+	import { confirmCount } from '$lib/confirm';
 
 	let debt_confirms: TDebtConfirm[] = [];
 
@@ -32,6 +33,7 @@
 			body: JSON.stringify({ id, debt_id, accept })
 		});
 		debt_confirms = await getDebtConfirm($currentUser?.id ?? '');
+		confirmCount.set(debt_confirms.length);
 	};
 </script>
 

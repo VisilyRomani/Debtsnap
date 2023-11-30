@@ -9,8 +9,7 @@
 	import Validate from '$lib/icons/validate.svelte';
 	import { page } from '$app/stores';
 	import { getDebtConfirmCount } from '$lib/functions/debt';
-
-	$: confirmCount = 0;
+	import { confirmCount } from '$lib/confirm';
 
 	onMount(async () => {
 		try {
@@ -28,21 +27,12 @@
 		await updateConfirmCount();
 	});
 
-	onDestroy(async () => {
-		(await unsubscribeLayoutCount)();
-	});
-
 	const updateConfirmCount = async () => {
-		confirmCount = await getDebtConfirmCount($currentUser?.id ?? '');
+		confirmCount.set(await getDebtConfirmCount($currentUser?.id ?? ''));
 		console.log(confirmCount);
 	};
 
 	$: $currentUser?.id && updateConfirmCount();
-
-	const unsubscribeLayoutCount = pb.collection('debt_confirm').subscribe('*', async () => {
-		console.log(confirmCount);
-		await updateConfirmCount();
-	});
 </script>
 
 {#if !($page.route.id === '/login')}
@@ -56,7 +46,7 @@
 					<div class="validate">
 						<Validate size={30} />
 						{#if confirmCount}
-							<span id="confirm-count">{confirmCount}</span>
+							<span id="confirm-count">{$confirmCount}</span>
 						{/if}
 					</div>
 					Confirm
