@@ -45,7 +45,7 @@
 				<div class="icon">
 					<div class="validate">
 						<Validate size={30} />
-						{#if confirmCount}
+						{#if $confirmCount}
 							<span id="confirm-count">{$confirmCount}</span>
 						{/if}
 					</div>
