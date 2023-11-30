@@ -2,7 +2,8 @@
 	import Add from '$lib/icons/add.svelte';
 	import { currentUser, pb } from '$lib/pocketbase';
 	import { onDestroy, onMount } from 'svelte';
-	import { fade, fly } from 'svelte/transition';
+	import { fly } from 'svelte/transition';
+	import dayjs from 'dayjs';
 	import type { PageData } from './$types';
 	import DebtModal from '$lib/components/modal/DebtModal.svelte';
 	import PaymentModal from '$lib/components/modal/PaymentModal.svelte';
@@ -96,7 +97,7 @@
 				class="avatar"
 				alt="avatar"
 				width="50px"
-				src="https://api.dicebear.com/7.x/bottts/svg?seed={debt.expand.debt_to.id ===
+				src="https://api.dicebear.com/7.x/bottts/svg?seed={debt.expand.debt_from.id ===
 				$currentUser?.id
 					? debt.expand.debt_from.username
 					: debt.expand.debt_to.username}"
@@ -133,20 +134,16 @@
 			<div class="pay">
 				<div>
 					<p>
-						{new Date(debt.created).toLocaleTimeString()}
+						{dayjs(debt.created).format('DD/MM/YYYY')}
 					</p>
 					<p>
-						{new Date(debt.created).toLocaleDateString()}
+						{dayjs(debt.created).format('h:mm A')}
 					</p>
 				</div>
 				<div class="grid-section">
 					{#if debt.status === 'completed'}
 						<h3>Resolved</h3>
-					{:else if debt.status === 'requested'}
-						<h3>Requested</h3>
-					{:else if debt.status == 'pending'}
-						<h3>Pending</h3>
-					{:else if !(debt.expand.debt_to.id === $currentUser?.id)}
+					{:else if debt.expand.debt_from.id === $currentUser?.id && debt.status === 'requested'}
 						<button
 							type="button"
 							on:click={() => {
@@ -154,6 +151,10 @@
 								payDebtModal = true;
 							}}>Pay</button
 						>
+					{:else if debt.status === 'requested'}
+						<h3>Requested</h3>
+					{:else if debt.status == 'pending'}
+						<h3>Pending</h3>
 					{/if}
 				</div>
 			</div>

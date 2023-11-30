@@ -28,18 +28,20 @@
 		await updateConfirmCount();
 	});
 
-	onDestroy(() => {
-		pb.collection('debt_confirm').unsubscribe();
+	onDestroy(async () => {
+		(await unsubscribeLayoutCount)();
 	});
 
 	const updateConfirmCount = async () => {
 		confirmCount = await getDebtConfirmCount($currentUser?.id ?? '');
+		console.log(confirmCount);
 	};
 
 	$: $currentUser?.id && updateConfirmCount();
 
-	pb.collection('debt_confirm').subscribe('*', async () => {
-		updateConfirmCount();
+	const unsubscribeLayoutCount = pb.collection('debt_confirm').subscribe('*', async () => {
+		console.log(confirmCount);
+		await updateConfirmCount();
 	});
 </script>
 
