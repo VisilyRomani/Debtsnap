@@ -17,6 +17,7 @@
 
 	const unsubscribeConfirm = pb.collection('debt_confirm').subscribe('*', async () => {
 		debt_confirms = await getDebtConfirm($currentUser?.id ?? '');
+		confirmCount.set(debt_confirms.length);
 	});
 
 	const requestReponse = async ({
