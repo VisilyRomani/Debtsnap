@@ -37,17 +37,19 @@
 		debts = await getAllDebt();
 	});
 
-	$: sortedDebts = (debts ?? []).reduce(
-		(acc, cur) => {
-			if (cur.status === 'requested' && cur.expand.debt_to.id !== ($currentUser?.id ?? '')) {
-				acc.requested.push(cur);
-			} else if (cur.status !== 'completed') {
-				acc.other.push(cur);
-			}
-			return acc;
-		},
-		{ requested: [] as TDebt[], other: [] as TDebt[] }
-	);
+	$: sortedDebts = (debts ?? [])
+		.filter((d) => (isActive ? d.status !== 'completed' : d.status === 'completed'))
+		.reduce(
+			(acc, cur) => {
+				if (cur.status === 'requested' && cur.expand.debt_to.id !== ($currentUser?.id ?? '')) {
+					acc.requested.push(cur);
+				} else {
+					acc.other.push(cur);
+				}
+				return acc;
+			},
+			{ requested: [] as TDebt[], other: [] as TDebt[] }
+		);
 
 	$: amountOwed =
 		(debts ?? [])
