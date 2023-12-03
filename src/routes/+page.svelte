@@ -25,7 +25,7 @@
 </script>
 
 <div class="container">
-	<h1 id="header">Control of Your Finances</h1>
+	<h1 id="header">Control Your Finances</h1>
 	<p>
 		DebtSnap allows you to track your debts with all of your friends. Never argue about who paid for
 		what ever again.
