@@ -17,7 +17,6 @@
 	});
 
 	const checkRoute = async (id: string) => {
-		console.log(id);
 		if (id === '/') {
 			return;
 		} else if (id !== '/login') {
@@ -96,6 +95,7 @@
 <style>
 	.landing {
 		height: 100%;
+		overflow: auto;
 	}
 	.landing-nav {
 		display: flex;
