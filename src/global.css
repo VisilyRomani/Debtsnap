@@ -10,6 +10,16 @@
 
 	--dark-accent: #568259;
 }
+
+@font-face {
+	font-family: 'Cherolina';
+	font-style: normal;
+	font-weight: 400;
+	src:
+		local('Cherolina'),
+		url(/fonts/Cherolina.ttf) format('ttf');
+}
+
 html,
 body {
 	height: 100dvh;
