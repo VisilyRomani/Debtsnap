@@ -105,10 +105,7 @@
 				class="avatar"
 				alt="avatar"
 				width="50px"
-				src="https://api.dicebear.com/7.x/bottts/svg?seed={debt.expand.debt_from.id ===
-				$currentUser?.id
-					? debt.expand.debt_from.username
-					: debt.expand.debt_to.username}"
+				src="https://api.dicebear.com/7.x/bottts/svg?seed={debt.expand.debt_to.username}"
 			/>
 			{#if debt.expand.debt_to.id === $currentUser?.id}
 				<div style="display: flex; flex-direction: column;">

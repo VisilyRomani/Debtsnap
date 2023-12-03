@@ -22,8 +22,9 @@ body {
 }
 
 button {
-	all: unset;
+	/* all: unset; */
 	box-sizing: border-box;
+	border: none;
 	border-radius: 0.4em;
 	padding: 0.5em;
 	background-color: var(--dark-text);
@@ -33,7 +34,7 @@ button {
 	transition: all 0.1s;
 }
 
-button:disabled{
+button:disabled {
 	background-color: var(--light-text);
 }
 button:not(:disabled):hover {
@@ -53,7 +54,6 @@ select {
 	width: 100%;
 	box-shadow: 0px 0px 2px var(--light-text);
 	transition: all 0.3s;
-	
 }
 input:focus,
 textarea:focus,
@@ -61,14 +61,12 @@ select {
 	box-shadow: 0px 0px 3px var(--dark-text);
 }
 
-select:disabled{
+select:disabled {
 	color: #8e8e8e;
-
 }
 
-::placeholder{
+::placeholder {
 	color: #8e8e8e;
-
 }
 
 h1,

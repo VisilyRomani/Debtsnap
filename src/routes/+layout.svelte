@@ -1,6 +1,6 @@
 <script lang="ts">
 	import '../global.css';
-	import { onDestroy, onMount } from 'svelte';
+	import { onMount } from 'svelte';
 	import { currentUser, pb } from '$lib/pocketbase';
 	import { goto } from '$app/navigation';
 	import { Toaster } from 'svelte-french-toast';
@@ -10,38 +10,62 @@
 	import { page } from '$app/stores';
 	import { getDebtConfirmCount } from '$lib/functions/debt';
 	import { confirmCount } from '$lib/confirm';
+	import Logo from '$lib/icons/logo.svelte';
 
 	onMount(async () => {
-		try {
-			if (pb.authStore.isValid) {
-				await pb.collection('users').authRefresh();
-			} else {
-				pb.authStore.clear();
-				goto('/login');
-			}
-		} catch (error) {
-			pb.authStore.clear();
-			goto('/login');
-		}
-
 		await updateConfirmCount();
 	});
 
+	const checkRoute = async (id: string) => {
+		console.log(id);
+		if (id === '/') {
+			return;
+		} else if (id !== '/login') {
+			try {
+				if (pb.authStore.isValid) {
+					await pb.collection('users').authRefresh();
+				} else {
+					pb.authStore.clear();
+					await goto('/login');
+				}
+			} catch (error) {
+				pb.authStore.clear();
+				await goto('/login');
+			}
+		}
+	};
+
+	$: checkRoute($page.route?.id ?? '');
+
 	const updateConfirmCount = async () => {
 		confirmCount.set(await getDebtConfirmCount($currentUser?.id ?? ''));
-		console.log(confirmCount);
 	};
 
 	$: $currentUser?.id && updateConfirmCount();
 </script>
 
-{#if !($page.route.id === '/login')}
+{#if $page.route.id === '/'}
+	<div class="landing">
+		<nav class="landing-nav">
+			<div class="logo-header">
+				<Logo size={50} />
+			</div>
+
+			<div>
+				<a id="landing-login" href="/login" style="padding: .7em; font-size: large;">Login</a>
+			</div>
+		</nav>
+		<slot />
+	</div>
+{:else if $page.route.id === '/login'}
+	<slot />
+{:else}
 	<div class="nav_container">
 		<div class="content">
 			<slot />
 		</div>
 		<nav class="bottom-nav">
-			<a href="/confirm">
+			<a href="/confirm" class="mobile">
 				<div class="icon">
 					<div class="validate">
 						<Validate size={30} />
@@ -52,13 +76,13 @@
 					Confirm
 				</div>
 			</a>
-			<a href="/dashboard">
+			<a href="/dashboard" class="mobile">
 				<div class="icon">
 					<Home size={30} />
 					Dashboard
 				</div>
 			</a>
-			<a href="/profile">
+			<a href="/profile" class="mobile">
 				<div class="icon">
 					<Friends size={30} />
 					Profile
@@ -66,12 +90,40 @@
 			</a>
 		</nav>
 	</div>
-{:else}
-	<slot />
 {/if}
 <Toaster />
 
 <style>
+	.landing {
+		height: 100%;
+	}
+	.landing-nav {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 1em;
+		background-color: var(--light-accent);
+	}
+
+	#landing-login {
+		background-color: var(--dark-text);
+		color: var(--main-bg-color);
+		font-size: xx-large;
+		border-radius: 2em;
+		box-shadow: 0px 0px 5px 0px rgb(112, 112, 112);
+		transition: all 0.5s;
+	}
+	#landing-login:hover {
+		box-shadow: 0px 5px 7px 1px rgba(48, 66, 49, 0.147);
+	}
+
+	.logo-header {
+		font-size: 1.5em;
+		gap: 0.5em;
+		display: flex;
+		align-items: center;
+	}
+
 	.validate {
 		position: relative;
 	}
@@ -103,7 +155,7 @@
 		position: relative;
 		height: 100%;
 	}
-	a {
+	.mobile {
 		text-align: center;
 		border-radius: 0.3em;
 		padding: 0.5em;
@@ -111,11 +163,11 @@
 		width: 100%;
 		fill: var(--dark-text);
 	}
-	a:hover {
+	.mobile:hover {
 		color: var(--light-text);
 		fill: var(--light-text);
 	}
-	a:hover #confirm-count {
+	.mobile:hover #confirm-count {
 		background-color: rgb(255, 160, 160);
 	}
 
