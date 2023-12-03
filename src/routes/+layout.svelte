@@ -55,6 +55,11 @@
 			</div>
 		</nav>
 		<slot />
+		<hr />
+		<div class="footer">
+			<h4>© 2023 Michael Wong</h4>
+			<p>All contents (except the logo font) belong to Michael Wong</p>
+		</div>
 	</div>
 {:else if $page.route.id === '/login'}
 	<slot />
@@ -93,6 +98,10 @@
 <Toaster />
 
 <style>
+	.footer {
+		text-align: center;
+		margin: 2em;
+	}
 	.landing {
 		height: 100%;
 		overflow: auto;
@@ -101,7 +110,10 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		padding: 1em;
+		padding: 1.5em;
+		padding-left: 3em;
+		padding-right: 3em;
+
 		background-color: var(--light-accent);
 	}
 
