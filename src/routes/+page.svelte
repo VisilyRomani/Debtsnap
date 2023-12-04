@@ -29,10 +29,8 @@
 		entries.forEach((e) => {
 			if (e.isIntersecting) {
 				e.target.classList.add('show');
-				console.log('s');
 			} else {
 				e.target.classList.remove('show');
-				console.log('r');
 			}
 		});
 	});
