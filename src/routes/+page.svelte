@@ -266,6 +266,16 @@
 		display: grid;
 		place-content: center;
 	}
+
+	.point > h1 {
+		font-size: max(2vw, 2em);
+		margin-bottom: 1em;
+	}
+	.point > p {
+		font-size: max(1.3vw, 1.3em);
+		margin-bottom: 1em;
+	}
+
 	.secondary {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
@@ -342,12 +352,12 @@
 		background-size: cover;
 	}
 	#header {
-		font-size: max(6vw, 3em);
+		font-size: max(5vw, 3em);
 		font-family: Arial, Helvetica, sans-serif;
 	}
 
 	#sub-header {
-		font-size: max(1.3vw, 1em);
+		font-size: max(1.3vw, 1.3em);
 	}
 
 	.secondary:nth-child(even) > .point {
