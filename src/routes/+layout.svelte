@@ -11,6 +11,7 @@
 	import { getDebtConfirmCount } from '$lib/functions/debt';
 	import { confirmCount } from '$lib/confirm';
 	import Logo from '$lib/icons/logo.svelte';
+	import dayjs from 'dayjs';
 
 	onMount(async () => {
 		await updateConfirmCount();
@@ -47,7 +48,7 @@
 	<div class="landing">
 		<nav class="landing-nav">
 			<div class="logo-header">
-				<Logo size={50} />
+				<img width="50" alt="logo" src="/images/transparent-logo.png" />
 			</div>
 
 			<div>
@@ -57,8 +58,7 @@
 		<slot />
 		<hr />
 		<div class="footer">
-			<h4>© 2023 Michael Wong</h4>
-			<p>All contents (except the logo font) belong to Michael Wong</p>
+			<h4>© {dayjs(new Date()).format('YYYY')} Michael Wong</h4>
 		</div>
 	</div>
 {:else if $page.route.id === '/login'}
@@ -110,11 +110,10 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		padding: 1.5em;
-		padding-left: 3em;
-		padding-right: 3em;
-
-		background-color: var(--light-accent);
+		padding: 1em;
+		padding-left: 2em;
+		padding-right: 2em;
+		/* background-color: var(--light-accent); */
 	}
 
 	#landing-login {

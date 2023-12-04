@@ -8,6 +8,7 @@
 	import DebtModal from '$lib/components/modal/DebtModal.svelte';
 	import PaymentModal from '$lib/components/modal/PaymentModal.svelte';
 	import type { TDebt } from './+page.server';
+	import { statusColor } from '$lib/functions/helper';
 
 	let isActive = true;
 	let debts: TDebt[] = [];
@@ -57,19 +58,6 @@
 			.reduce((acc, cur) => {
 				return acc + (cur.expand.debt_to.id !== $currentUser?.id ? cur.cost : 0);
 			}, 0) ?? 0;
-
-	const statusColor = (status: string) => {
-		switch (status) {
-			case 'completed':
-				return 'border-left: 4px green solid;';
-			case 'requested':
-				return 'border-left: 4px red solid';
-			case 'pending':
-				return 'border-left: 4px orange solid;';
-			default:
-				return 'border-left: 4px gray solid;';
-		}
-	};
 </script>
 
 <!-- Main body -->
@@ -199,6 +187,18 @@
 		gap: 1em;
 	}
 
+	.friend {
+		display: grid;
+		grid-template-columns: auto 1fr min-content;
+		gap: 1em;
+		justify-items: start;
+		align-items: center;
+		background-color: var(--main-bg-color);
+		box-shadow: 0px 0px 5px 1px rgba(189, 189, 189, 0.527);
+		border-radius: 0.5em;
+		padding: 1em;
+		margin: 1em;
+	}
 	p {
 		white-space: nowrap;
 	}
@@ -214,18 +214,6 @@
 		width: 100%;
 		flex: 1 1 auto;
 		overflow-y: auto;
-	}
-	.friend {
-		display: grid;
-		grid-template-columns: auto 1fr min-content;
-		gap: 1em;
-		justify-items: start;
-		align-items: center;
-		background-color: var(--main-bg-color);
-		box-shadow: 0px 0px 5px 1px rgba(189, 189, 189, 0.527);
-		border-radius: 0.5em;
-		padding: 1em;
-		margin: 1em;
 	}
 	.total-container {
 		width: 100%;

@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { currentUser, pb } from '$lib/pocketbase';
 	import { onDestroy, onMount } from 'svelte';
-	import Add from '$lib/icons/add.svelte';
 	import Modal from '$lib/components/modal/Modal.svelte';
 	import type { PageData } from './$types';
 	import { superForm } from 'sveltekit-superforms/client';

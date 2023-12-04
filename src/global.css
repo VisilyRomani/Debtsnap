@@ -193,3 +193,28 @@ a {
 		transform: translateY(0px);
 	}
 }
+
+.hidden {
+	opacity: 0;
+	transition: all 1s;
+}
+.secondary > .debt-container > .hidden {
+	transform: translateX(-100%);
+	filter: blur(5px);
+}
+.secondary > .confirm-container > .confirm {
+	transform: translateX(100%);
+	filter: blur(5px);
+}
+
+.show {
+	opacity: 1;
+	filter: blur(0) !important;
+	transform: translateX(0%) !important;
+}
+
+@media (perfers-reduced-motion) {
+	.hidden {
+		transition: none;
+	}
+}
