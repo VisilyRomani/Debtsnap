@@ -21,14 +21,9 @@
 		if (id === '/') {
 			return;
 		} else if (id !== '/login') {
-			try {
-				if (pb.authStore.isValid) {
-					await pb.collection('users').authRefresh();
-				} else {
-					pb.authStore.clear();
-					await goto('/login');
-				}
-			} catch (error) {
+			if (pb.authStore.isValid) {
+				await pb.collection('users').authRefresh();
+			} else {
 				pb.authStore.clear();
 				await goto('/login');
 			}
