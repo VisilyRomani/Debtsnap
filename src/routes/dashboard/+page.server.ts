@@ -93,7 +93,15 @@ export const actions = {
 				.collection('debt')
 				.update(paymentForm.data.debt_id, { status: 'pending' });
 
-			// await pushDebt(paymentForm.data.user_to_pay, 'Confirm', locals.server_pb);
+			const clientDevices = await locals.server_pb.collection('push_detail').getList<TPush>(1, 30, {
+				filter: `user="${paymentForm.data.user_to_pay}"`
+			});
+			const subscriptions = clientDevices.items.map((d) => ({
+				endpoint: d.endpoint,
+				keys: { p256dh: d.p256dh, auth: d.auth }
+			}));
+
+			pushDebt(subscriptions, 'Confirm');
 		} catch (e) {
 			if (e instanceof Error) {
 				return setError(paymentForm, 'payment_details', e.message);

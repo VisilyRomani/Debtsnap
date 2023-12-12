@@ -2,6 +2,7 @@ import { fail } from '@sveltejs/kit';
 import z from 'zod';
 import { setError, superValidate } from 'sveltekit-superforms/server';
 import { pushDebt } from '$lib/server/push';
+import type { TPush } from '../api/subscribe/+server';
 // import { pushDebt } from '$lib/server/push';
 export type TUser = { id: string; name: string; username: string }[];
 
@@ -52,8 +53,16 @@ export const actions = {
 					{ sender: friendForm.data.id, reciever: friendForm.data.friend_id },
 					{ requestKey: null }
 				);
-			await pushDebt(friendForm.data.friend_id, 'Friend', locals.server_pb);
 
+			const clientDevices = await locals.server_pb.collection('push_detail').getList<TPush>(1, 30, {
+				filter: `user="${friendForm.data.friend_id}"`
+			});
+			const subscriptions = clientDevices.items.map((d) => ({
+				endpoint: d.endpoint,
+				keys: { p256dh: d.p256dh, auth: d.auth }
+			}));
+
+			pushDebt(subscriptions, 'Friend');
 			return { friendForm };
 		} catch (err) {
 			if (err instanceof Error) {
