@@ -13,6 +13,7 @@
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^2.0.0",
+		"@sveltejs/adapter-cloudflare": "^2.3.4",
 		"@sveltejs/kit": "^1.27.4",
 		"@types/uniqid": "^5.3.4",
 		"@types/web-push": "^3.6.3",
@@ -40,7 +41,7 @@
 		"uniqid": "^5.4.0",
 		"web-push": "^3.6.6"
 	},
-	"browser":{
-		"web-push":false
+	"browser": {
+		"web-push": false
 	}
 }
