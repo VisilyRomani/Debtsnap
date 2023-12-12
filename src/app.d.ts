@@ -6,6 +6,7 @@ declare global {
 		// interface Error {}
 		interface Locals {
 			server_pb: PocketBase;
+			pushDebt: (subscriptions: TSubscription[], messageType: TMessageType) => void;
 		}
 		// interface PageData {}
 		// interface Platform {}

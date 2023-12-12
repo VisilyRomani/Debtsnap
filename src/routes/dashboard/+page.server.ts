@@ -1,9 +1,7 @@
-// import { pushDebt } from '$lib/server/push';
 import { fail } from '@sveltejs/kit';
 import { setError, superValidate } from 'sveltekit-superforms/server';
 import z from 'zod';
 import type { TPush } from '../api/subscribe/+server';
-import { pushTest } from '$lib/server/push';
 
 export type TDebt = {
 	cost: number;
@@ -42,11 +40,6 @@ const debtValidation = z.object({
 export const load = ({ request }) => {
 	const debtForm = superValidate(request, debtValidation);
 	const paymentForm = superValidate(request, paymentValidation);
-	try {
-		pushTest();
-	} catch (e) {
-		console.log(e);
-	}
 	return { debtForm, paymentForm };
 };
 
@@ -73,7 +66,7 @@ export const actions = {
 				keys: { p256dh: d.p256dh, auth: d.auth }
 			}));
 
-			// pushDebt(subscriptions, 'Debt');
+			locals.pushDebt(subscriptions, 'Debt');
 		} catch (e) {
 			if (e instanceof Error) return setError(debtForm, 'debt_to', e.message);
 		}
