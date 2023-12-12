@@ -2,6 +2,7 @@ import { pushDebt } from '$lib/server/push';
 import { fail } from '@sveltejs/kit';
 import { setError, superValidate } from 'sveltekit-superforms/server';
 import z from 'zod';
+import type { TPush } from '../api/subscribe/+server';
 
 export type TDebt = {
 	cost: number;
@@ -58,7 +59,16 @@ export const actions = {
 					{ ...debtForm.data, cost: (debtForm.data.cost * 100).toFixed(0), status: 'requested' },
 					{ requestKey: null }
 				);
-			pushDebt(debtForm.data.debt_from, 'Debt', locals.server_pb);
+
+			const clientDevices = await locals.server_pb.collection('push_detail').getList<TPush>(1, 30, {
+				filter: `user="${debtForm.data.debt_from}"`
+			});
+			const subscriptions = clientDevices.items.map((d) => ({
+				endpoint: d.endpoint,
+				keys: { p256dh: d.p256dh, auth: d.auth }
+			}));
+
+			pushDebt(subscriptions, 'Debt');
 		} catch (e) {
 			if (e instanceof Error) return setError(debtForm, 'debt_to', e.message);
 		}

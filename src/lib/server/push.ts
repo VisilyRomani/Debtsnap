@@ -5,6 +5,14 @@ import type Client from 'pocketbase';
 import type { TPush } from '../../routes/api/subscribe/+server';
 type TMessageType = 'Debt' | 'Confirm' | 'Friend';
 
+type TSubscription = {
+	endpoint: string;
+	keys: {
+		p256dh: string;
+		auth: string;
+	};
+};
+
 webpush.setVapidDetails('mailto:visilyromanicm@gmail.com', PUBLIC_VAPID_KEY, PRIVATE_VAPID_KEY);
 
 export const pushTest = () => {
@@ -37,29 +45,28 @@ const pushMessage = (messageType: TMessageType) => {
 	}
 };
 
-export const pushDebt = (user: string, messageType: TMessageType, server_pb: Client) => {
+export const pushDebt = (subscriptions: TSubscription[], messageType: TMessageType) => {
 	const payload = pushMessage(messageType);
-	try {
-		const clientDevices = server_pb.collection('push_detail').getList<TPush>(1, 30, {
-			filter: `user="${user}"`
-		});
-		clientDevices.then((devices) => {
-			devices.items.forEach((device) => {
-				if (device.endpoint) {
-					const subscription = {
-						endpoint: device.endpoint,
-						keys: {
-							p256dh: device.p256dh,
-							auth: device.auth
-						}
-					};
-					webpush.sendNotification(subscription, payload).catch((error) => {
-						console.log(error);
-					});
-				}
-			});
-		});
-	} catch (e) {
-		console.log(e);
-	}
+	// const clientDevices = server_pb.collection('push_detail').getList<TPush>(1, 30, {
+	// 	filter: `user="${user}"`
+	// });
+
+	// clientDevices
+	// 	.then((devices) => {
+	// 		devices.items.forEach((device) => {
+	// 			if (device.endpoint) {
+	// 				const subscription = {
+	// 					endpoint: device.endpoint,
+	// 					keys: {
+	// 						p256dh: device.p256dh,
+	// 						auth: device.auth
+	// 					}
+	// 				};
+	// 			}
+	// 		});
+	// 	})
+	// 	.catch((e) => console.log(e));
+	// webpush.sendNotification(, payload).catch((error) => {
+	// 	console.log(error);
+	// });
 };
