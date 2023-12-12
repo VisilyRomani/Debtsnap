@@ -13,8 +13,6 @@ type TSubscription = {
 	};
 };
 
-webpush.setVapidDetails('mailto:visilyromanicm@gmail.com', PUBLIC_VAPID_KEY, PRIVATE_VAPID_KEY);
-
 export const pushTest = () => {
 	const payload = JSON.stringify({ title: 'test', message: 'test' });
 	webpush
@@ -46,6 +44,7 @@ const pushMessage = (messageType: TMessageType) => {
 };
 
 export const pushDebt = (subscriptions: TSubscription[], messageType: TMessageType) => {
+	webpush.setVapidDetails('mailto:visilyromanicm@gmail.com', PUBLIC_VAPID_KEY, PRIVATE_VAPID_KEY);
 	const payload = pushMessage(messageType);
 	// const clientDevices = server_pb.collection('push_detail').getList<TPush>(1, 30, {
 	// 	filter: `user="${user}"`

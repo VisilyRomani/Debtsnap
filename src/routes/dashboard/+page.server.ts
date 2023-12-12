@@ -66,7 +66,7 @@ export const actions = {
 				keys: { p256dh: d.p256dh, auth: d.auth }
 			}));
 
-			locals.pushDebt(subscriptions, 'Debt');
+			// locals.pushDebt(subscriptions, 'Debt');
 		} catch (e) {
 			if (e instanceof Error) return setError(debtForm, 'debt_to', e.message);
 		}
