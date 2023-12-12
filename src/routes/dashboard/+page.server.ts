@@ -1,4 +1,4 @@
-import { pushDebt } from '$lib/server/push';
+// import { pushDebt } from '$lib/server/push';
 import { fail } from '@sveltejs/kit';
 import { setError, superValidate } from 'sveltekit-superforms/server';
 import z from 'zod';
@@ -58,7 +58,7 @@ export const actions = {
 					{ ...debtForm.data, cost: (debtForm.data.cost * 100).toFixed(0), status: 'requested' },
 					{ requestKey: null }
 				);
-			await pushDebt(debtForm.data.debt_from, 'Debt', locals.server_pb);
+			// await pushDebt(debtForm.data.debt_from, 'Debt', locals.server_pb);
 		} catch (e) {
 			if (e instanceof Error) return setError(debtForm, 'debt_to', e.message);
 		}
@@ -83,7 +83,7 @@ export const actions = {
 				.collection('debt')
 				.update(paymentForm.data.debt_id, { status: 'pending' });
 
-			await pushDebt(paymentForm.data.user_to_pay, 'Confirm', locals.server_pb);
+			// await pushDebt(paymentForm.data.user_to_pay, 'Confirm', locals.server_pb);
 		} catch (e) {
 			if (e instanceof Error) {
 				return setError(paymentForm, 'payment_details', e.message);
