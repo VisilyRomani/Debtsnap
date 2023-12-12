@@ -40,8 +40,5 @@
 		"short-unique-id": "^5.0.3",
 		"svelte-french-toast": "^1.2.0",
 		"web-push": "^3.6.6"
-	},
-	"browser": {
-		"web-push": false
 	}
 }
