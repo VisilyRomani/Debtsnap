@@ -9,16 +9,18 @@
 	import PaymentModal from '$lib/components/modal/PaymentModal.svelte';
 	import type { TDebt } from './+page.server';
 	import { statusColor } from '$lib/functions/helper';
-
+	import { registerPush } from '$lib/client/client_push';
 	let isActive = true;
 	let debts: TDebt[] = [];
 	let newDebtModal = false;
 	let payDebtModal = false;
 	let selectedDebt: string;
+	let userToPay:string
 	export let data: PageData;
 
 	onMount(async () => {
 		debts = await getAllDebt();
+		registerPush($currentUser?.id ?? '')
 	});
 
 	onDestroy(async () => {
@@ -141,6 +143,7 @@
 							type="button"
 							on:click={() => {
 								selectedDebt = debt.id;
+								userToPay = debt.expand.debt_to.id;
 								payDebtModal = true;
 							}}>Pay</button
 						>
@@ -162,7 +165,7 @@
 </div>
 
 <DebtModal bind:data bind:newDebtModal />
-<PaymentModal bind:data {selectedDebt} bind:payDebtModal />
+<PaymentModal bind:data {selectedDebt} bind:payDebtModal bind:userToPay />
 
 <style>
 	.tab-select {

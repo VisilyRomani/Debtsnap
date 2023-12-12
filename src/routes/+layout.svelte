@@ -10,7 +10,6 @@
 	import { page } from '$app/stores';
 	import { getDebtConfirmCount } from '$lib/functions/debt';
 	import { confirmCount } from '$lib/confirm';
-	import Logo from '$lib/icons/logo.svelte';
 	import dayjs from 'dayjs';
 
 	onMount(async () => {

@@ -7,12 +7,15 @@
 	export let data: PageData;
 	export let payDebtModal = false;
 	export let selectedDebt: string;
+	export let userToPay: string;
 
 	const { form, errors, enhance, reset } = superForm(data.paymentForm, {
 		taintedMessage: null,
 		resetForm: true,
 		onSubmit: ({ formData }) => {
 			formData.set('debt_id', selectedDebt);
+			formData.set('user_to_pay', userToPay);
+
 		},
 		onResult: ({ result }) => {
 			if (result.type === 'success') {

@@ -10,7 +10,7 @@
 		"sourceMap": true,
 		"strict": true,
 		"moduleResolution": "bundler",
-		"lib": ["webworker"]
+		"lib": ["webworker"],
 	}
 	// Path aliases are handled by https://kit.svelte.dev/docs/configuration#alias
 	//

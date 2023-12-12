@@ -4,8 +4,6 @@
 /// <reference lib="webworker" />
 const sw = /** @type {ServiceWorkerGlobalScope} */ /** @type {unknown} */ self;
 
-import { build, files, version } from '$service-worker';
-
 sw.addEventListener('fetch', (e) => {
 	// console.log(e);
 	const a = async () => {
@@ -13,4 +11,13 @@ sw.addEventListener('fetch', (e) => {
 	};
 
 	(e as FetchEvent).respondWith(a());
+});
+
+sw.addEventListener('push', (e) => {
+	const data = (e as PushEvent).data?.json();
+	// @ts-ignore registration not found in service worker type
+	sw.registration.showNotification(data.title, {
+		body: data.message,
+		icon: 'icon512_maskable.png'
+	});
 });
