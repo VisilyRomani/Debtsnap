@@ -24,27 +24,27 @@ const pushMessage = (messageType: TMessageType) => {
 	}
 };
 
-export const pushDebt = async (user: string, messageType: TMessageType) => {
-	const payload = pushMessage(messageType);
-	try {
-		const clientDevices = await server_pb.collection('push_detail').getList<TPush>(1, 30, {
-			filter: `user="${user}"`
-		});
-		clientDevices.items.forEach((device) => {
-			if (device.endpoint) {
-				const subscription = {
-					endpoint: device.endpoint,
-					keys: {
-						p256dh: device.p256dh,
-						auth: device.auth
-					}
-				};
-				webpush.sendNotification(subscription, payload).catch((error) => {
-					console.error(error.stack);
-				});
-			}
-		});
-	} catch (e) {
-		console.log(e);
-	}
-};
+// export const pushDebt = async (user: string, messageType: TMessageType) => {
+// 	const payload = pushMessage(messageType);
+// 	try {
+// 		const clientDevices = await server_pb.collection('push_detail').getList<TPush>(1, 30, {
+// 			filter: `user="${user}"`
+// 		});
+// 		clientDevices.items.forEach((device) => {
+// 			if (device.endpoint) {
+// 				const subscription = {
+// 					endpoint: device.endpoint,
+// 					keys: {
+// 						p256dh: device.p256dh,
+// 						auth: device.auth
+// 					}
+// 				};
+// 				webpush.sendNotification(subscription, payload).catch((error) => {
+// 					console.error(error.stack);
+// 				});
+// 			}
+// 		});
+// 	} catch (e) {
+// 		console.log(e);
+// 	}
+// };

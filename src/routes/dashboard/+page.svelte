@@ -9,7 +9,7 @@
 	import PaymentModal from '$lib/components/modal/PaymentModal.svelte';
 	import type { TDebt } from './+page.server';
 	import { statusColor } from '$lib/functions/helper';
-	import { registerPush } from '$lib/client/client_push';
+	// import { registerPush } from '$lib/client/client_push';
 	let isActive = true;
 	let debts: TDebt[] = [];
 	let newDebtModal = false;
