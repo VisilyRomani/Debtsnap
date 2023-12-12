@@ -10,6 +10,7 @@ sw.addEventListener('push', (e) => {
 
 	if ('Notification' in sw) {
 		try {
+			// @ts-ignore
 			sw.registration.showNotification(data.title, {
 				body: data.message,
 				icon: 'icon512_maskable.png'
