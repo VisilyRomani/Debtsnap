@@ -1,6 +1,6 @@
 import { PRIVATE_VAPID_KEY } from '$env/static/private';
 import { PUBLIC_VAPID_KEY } from '$env/static/public';
-import webpush from 'web-push';
+import webpush, { WebPushError } from 'web-push';
 import type Client from 'pocketbase';
 import type { TPush } from '../../routes/api/subscribe/+server';
 type TMessageType = 'Debt' | 'Confirm' | 'Friend';
@@ -30,8 +30,8 @@ export const pushTest = () => {
 			},
 			payload
 		)
-		.catch((error) => {
-			console.error(error.stack);
+		.catch((error: WebPushError) => {
+			console.log(error.message);
 		});
 };
 
