@@ -1,6 +1,7 @@
 import { fail } from '@sveltejs/kit';
 import z from 'zod';
 import { setError, superValidate } from 'sveltekit-superforms/server';
+import { pushDebt } from '$lib/server/push';
 // import { pushDebt } from '$lib/server/push';
 export type TUser = { id: string; name: string; username: string }[];
 
@@ -51,7 +52,7 @@ export const actions = {
 					{ sender: friendForm.data.id, reciever: friendForm.data.friend_id },
 					{ requestKey: null }
 				);
-			// await pushDebt(friendForm.data.friend_id, 'Friend');
+			await pushDebt(friendForm.data.friend_id, 'Friend', locals.server_pb);
 
 			return { friendForm };
 		} catch (err) {

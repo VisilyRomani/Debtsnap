@@ -1,7 +1,7 @@
 import { PRIVATE_VAPID_KEY } from '$env/static/private';
 import { PUBLIC_VAPID_KEY } from '$env/static/public';
 import webpush, { type PushSubscription } from 'web-push';
-import { server_pb } from './server';
+import type Client from 'pocketbase';
 import type { TPush } from '../../routes/api/subscribe/+server';
 type TMessageType = 'Debt' | 'Confirm' | 'Friend';
 
@@ -37,7 +37,7 @@ const pushMessage = (messageType: TMessageType) => {
 	}
 };
 
-export const pushDebt = async (user: string, messageType: TMessageType) => {
+export const pushDebt = async (user: string, messageType: TMessageType, server_pb: Client) => {
 	const payload = pushMessage(messageType);
 	try {
 		const clientDevices = await server_pb.collection('push_detail').getList<TPush>(1, 30, {
@@ -52,9 +52,9 @@ export const pushDebt = async (user: string, messageType: TMessageType) => {
 						auth: device.auth
 					}
 				};
-				// webpush.sendNotification(subscription, payload).catch((error) => {
-				// 	console.log(error);
-				// });
+				webpush.sendNotification(subscription, payload).catch((error) => {
+					console.log(error);
+				});
 			}
 		});
 	} catch (e) {
