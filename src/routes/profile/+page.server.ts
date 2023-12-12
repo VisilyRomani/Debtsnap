@@ -1,9 +1,9 @@
 import { fail } from '@sveltejs/kit';
 import z from 'zod';
 import { setError, superValidate } from 'sveltekit-superforms/server';
-import { pushDebt } from '$lib/server/push';
-import type { TPush } from '../api/subscribe/+server';
 // import { pushDebt } from '$lib/server/push';
+import type { TPush } from '../api/subscribe/+server';
+
 export type TUser = { id: string; name: string; username: string }[];
 
 const validateFriend = z.object({
@@ -62,7 +62,7 @@ export const actions = {
 				keys: { p256dh: d.p256dh, auth: d.auth }
 			}));
 
-			pushDebt(subscriptions, 'Friend');
+			// pushDebt(subscriptions, 'Friend');
 			return { friendForm };
 		} catch (err) {
 			if (err instanceof Error) {

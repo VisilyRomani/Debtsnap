@@ -1,4 +1,4 @@
-import { pushDebt } from '$lib/server/push';
+// import { pushDebt } from '$lib/server/push';
 import { fail } from '@sveltejs/kit';
 import { setError, superValidate } from 'sveltekit-superforms/server';
 import z from 'zod';
@@ -68,7 +68,7 @@ export const actions = {
 				keys: { p256dh: d.p256dh, auth: d.auth }
 			}));
 
-			pushDebt(subscriptions, 'Debt');
+			// pushDebt(subscriptions, 'Debt');
 		} catch (e) {
 			if (e instanceof Error) return setError(debtForm, 'debt_to', e.message);
 		}
@@ -101,7 +101,7 @@ export const actions = {
 				keys: { p256dh: d.p256dh, auth: d.auth }
 			}));
 
-			pushDebt(subscriptions, 'Confirm');
+			// pushDebt(subscriptions, 'Confirm');
 		} catch (e) {
 			if (e instanceof Error) {
 				return setError(paymentForm, 'payment_details', e.message);
