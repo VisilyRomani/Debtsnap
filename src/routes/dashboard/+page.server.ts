@@ -3,7 +3,7 @@ import { fail } from '@sveltejs/kit';
 import { setError, superValidate } from 'sveltekit-superforms/server';
 import z from 'zod';
 import type { TPush } from '../api/subscribe/+server';
-import { pushTest } from '$lib/server/push';
+// import { pushTest } from '$lib/server/push';
 
 export type TDebt = {
 	cost: number;
@@ -42,7 +42,7 @@ const debtValidation = z.object({
 export const load = ({ request }) => {
 	const debtForm = superValidate(request, debtValidation);
 	const paymentForm = superValidate(request, paymentValidation);
-	pushTest();
+	// pushTest();
 	return { debtForm, paymentForm };
 };
 

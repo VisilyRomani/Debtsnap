@@ -16,7 +16,7 @@ type TSubscription = {
 webpush.setVapidDetails('mailto:visilyromanicm@gmail.com', PUBLIC_VAPID_KEY, PRIVATE_VAPID_KEY);
 
 export const pushTest = () => {
-	const payload = JSON.stringify({ title: 'test' });
+	const payload = JSON.stringify({ title: 'test', message: 'test' });
 	webpush
 		.sendNotification(
 			{
