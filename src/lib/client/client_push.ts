@@ -2,6 +2,15 @@ import { PUBLIC_VAPID_KEY } from '$env/static/public';
 import { set_create_hardware } from './hardware';
 export const registerPush = async (user_id: string) => {
 	const registration = await navigator.serviceWorker.getRegistration();
+
+	try {
+		if (!registration?.pushManager) {
+			return;
+		}
+	} catch (e) {
+		console.log(e);
+	}
+
 	const permission = await registration?.pushManager.permissionState({ userVisibleOnly: true });
 	if (registration?.pushManager && permission !== 'denied') {
 		const subscription = await registration.pushManager.subscribe({
