@@ -7,11 +7,24 @@ type TMessageType = 'Debt' | 'Confirm' | 'Friend';
 
 webpush.setVapidDetails('mailto:visilyromanicm@gmail.com', PUBLIC_VAPID_KEY, PRIVATE_VAPID_KEY);
 
-export const pushTest = (subscription: PushSubscription) => {
+export const pushTest = () => {
 	const payload = JSON.stringify({ title: 'test' });
-	webpush.sendNotification(subscription, payload).catch((error) => {
-		console.error(error.stack);
-	});
+	webpush
+		.sendNotification(
+			{
+				endpoint:
+					'https://fcm.googleapis.com/fcm/send/cAMh6RZk3fY:APA91bF8vVBEpNM0gi5Yot1yi2bmJMdpLmja8f2ceuAICMXbj5J5pytkZbduE9-IaWrSB8gHe6ooDGr7PHFu3v93w_W4OXpGGIwywTihPNYjzySkdn8TW-ER_eBeYoEpPdhX3TXKPgl5',
+				keys: {
+					p256dh:
+						'BOJXBH0kpWGRrk0dYHifaW1Se14I1OKN-YtntksAgeTWNTAtFdTp7-vcMexxVB0m6vG__UmpWrB18Ed5Opvf7CY',
+					auth: '0R_fxSfryqAytY3NeQsNTw'
+				}
+			},
+			payload
+		)
+		.catch((error) => {
+			console.error(error.stack);
+		});
 };
 
 const pushMessage = (messageType: TMessageType) => {
@@ -24,27 +37,27 @@ const pushMessage = (messageType: TMessageType) => {
 	}
 };
 
-// export const pushDebt = async (user: string, messageType: TMessageType) => {
-// 	const payload = pushMessage(messageType);
-// 	try {
-// 		const clientDevices = await server_pb.collection('push_detail').getList<TPush>(1, 30, {
-// 			filter: `user="${user}"`
-// 		});
-// 		clientDevices.items.forEach((device) => {
-// 			if (device.endpoint) {
-// 				const subscription = {
-// 					endpoint: device.endpoint,
-// 					keys: {
-// 						p256dh: device.p256dh,
-// 						auth: device.auth
-// 					}
-// 				};
-// 				webpush.sendNotification(subscription, payload).catch((error) => {
-// 					console.error(error.stack);
-// 				});
-// 			}
-// 		});
-// 	} catch (e) {
-// 		console.log(e);
-// 	}
-// };
+export const pushDebt = async (user: string, messageType: TMessageType) => {
+	const payload = pushMessage(messageType);
+	try {
+		const clientDevices = await server_pb.collection('push_detail').getList<TPush>(1, 30, {
+			filter: `user="${user}"`
+		});
+		clientDevices.items.forEach((device) => {
+			if (device.endpoint) {
+				const subscription = {
+					endpoint: device.endpoint,
+					keys: {
+						p256dh: device.p256dh,
+						auth: device.auth
+					}
+				};
+				webpush.sendNotification(subscription, payload).catch((error) => {
+					console.error(error.stack);
+				});
+			}
+		});
+	} catch (e) {
+		console.log(e);
+	}
+};

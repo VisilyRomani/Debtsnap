@@ -1,4 +1,4 @@
-// import { pushDebt } from '$lib/server/push';
+import { pushDebt } from '$lib/server/push';
 import { fail } from '@sveltejs/kit';
 import { setError, superValidate } from 'sveltekit-superforms/server';
 import z from 'zod';
