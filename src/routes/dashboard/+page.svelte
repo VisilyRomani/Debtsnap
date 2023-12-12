@@ -20,7 +20,7 @@
 
 	onMount(async () => {
 		debts = await getAllDebt();
-		registerPush($currentUser?.id ?? '')
+		// registerPush($currentUser?.id ?? '')
 	});
 
 	onDestroy(async () => {
