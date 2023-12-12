@@ -1,6 +1,6 @@
 import { PRIVATE_VAPID_KEY } from '$env/static/private';
 import { PUBLIC_VAPID_KEY } from '$env/static/public';
-import webpush, { type PushSubscription } from 'web-push';
+import webpush from 'web-push';
 import type Client from 'pocketbase';
 import type { TPush } from '../../routes/api/subscribe/+server';
 type TMessageType = 'Debt' | 'Confirm' | 'Friend';
@@ -38,26 +38,26 @@ const pushMessage = (messageType: TMessageType) => {
 };
 
 export const pushDebt = async (user: string, messageType: TMessageType, server_pb: Client) => {
-	const payload = pushMessage(messageType);
-	try {
-		const clientDevices = await server_pb.collection('push_detail').getList<TPush>(1, 30, {
-			filter: `user="${user}"`
-		});
-		clientDevices.items.forEach((device) => {
-			if (device.endpoint) {
-				const subscription = {
-					endpoint: device.endpoint,
-					keys: {
-						p256dh: device.p256dh,
-						auth: device.auth
-					}
-				};
-				webpush.sendNotification(subscription, payload).catch((error) => {
-					console.log(error);
-				});
-			}
-		});
-	} catch (e) {
-		console.log(e);
-	}
+	// const payload = pushMessage(messageType);
+	// try {
+	// 	const clientDevices = await server_pb.collection('push_detail').getList<TPush>(1, 30, {
+	// 		filter: `user="${user}"`
+	// 	});
+	// 	clientDevices.items.forEach((device) => {
+	// 		if (device.endpoint) {
+	// 			const subscription = {
+	// 				endpoint: device.endpoint,
+	// 				keys: {
+	// 					p256dh: device.p256dh,
+	// 					auth: device.auth
+	// 				}
+	// 			};
+	// 			webpush.sendNotification(subscription, payload).catch((error) => {
+	// 				console.log(error);
+	// 			});
+	// 		}
+	// 	});
+	// } catch (e) {
+	// 	console.log(e);
+	// }
 };
