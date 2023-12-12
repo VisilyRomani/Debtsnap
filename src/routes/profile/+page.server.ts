@@ -62,7 +62,7 @@ export const actions = {
 				keys: { p256dh: d.p256dh, auth: d.auth }
 			}));
 
-			// pushDebt(subscriptions, 'Friend');
+			locals.pushDebt(subscriptions, 'Friend');
 			return { friendForm };
 		} catch (err) {
 			if (err instanceof Error) {

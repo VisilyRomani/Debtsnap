@@ -46,26 +46,10 @@ const pushMessage = (messageType: TMessageType) => {
 export const pushDebt = (subscriptions: TSubscription[], messageType: TMessageType) => {
 	webpush.setVapidDetails('mailto:visilyromanicm@gmail.com', PUBLIC_VAPID_KEY, PRIVATE_VAPID_KEY);
 	const payload = pushMessage(messageType);
-	// const clientDevices = server_pb.collection('push_detail').getList<TPush>(1, 30, {
-	// 	filter: `user="${user}"`
-	// });
 
-	// clientDevices
-	// 	.then((devices) => {
-	// 		devices.items.forEach((device) => {
-	// 			if (device.endpoint) {
-	// 				const subscription = {
-	// 					endpoint: device.endpoint,
-	// 					keys: {
-	// 						p256dh: device.p256dh,
-	// 						auth: device.auth
-	// 					}
-	// 				};
-	// 			}
-	// 		});
-	// 	})
-	// 	.catch((e) => console.log(e));
-	// webpush.sendNotification(, payload).catch((error) => {
-	// 	console.log(error);
-	// });
+	subscriptions.forEach((device) => {
+		webpush.sendNotification(device, payload).catch((error) => {
+			console.log(error);
+		});
+	});
 };

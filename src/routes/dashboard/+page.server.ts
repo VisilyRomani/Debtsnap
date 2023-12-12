@@ -66,7 +66,7 @@ export const actions = {
 				keys: { p256dh: d.p256dh, auth: d.auth }
 			}));
 
-			// locals.pushDebt(subscriptions, 'Debt');
+			locals.pushDebt(subscriptions, 'Debt');
 		} catch (e) {
 			if (e instanceof Error) return setError(debtForm, 'debt_to', e.message);
 		}
@@ -99,7 +99,7 @@ export const actions = {
 				keys: { p256dh: d.p256dh, auth: d.auth }
 			}));
 
-			// pushDebt(subscriptions, 'Confirm');
+			locals.pushDebt(subscriptions, 'Confirm');
 		} catch (e) {
 			if (e instanceof Error) {
 				return setError(paymentForm, 'payment_details', e.message);
