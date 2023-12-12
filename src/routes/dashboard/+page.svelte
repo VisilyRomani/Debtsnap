@@ -24,7 +24,7 @@
 	});
 
 	onDestroy(async () => {
-		(await unsubscribtDebt)();
+		(await unsubscribeDebt)();
 	});
 
 	const getAllDebt = (): Promise<TDebt[]> => {
@@ -36,7 +36,7 @@
 		});
 	};
 
-	const unsubscribtDebt = pb.collection('debt').subscribe('*', async () => {
+	const unsubscribeDebt = pb.collection('debt').subscribe('*', async () => {
 		debts = await getAllDebt();
 	});
 
