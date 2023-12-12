@@ -52,9 +52,9 @@ export const pushDebt = async (user: string, messageType: TMessageType) => {
 						auth: device.auth
 					}
 				};
-				webpush.sendNotification(subscription, payload).catch((error) => {
-					console.error(error.stack);
-				});
+				// webpush.sendNotification(subscription, payload).catch((error) => {
+				// 	console.log(error);
+				// });
 			}
 		});
 	} catch (e) {
