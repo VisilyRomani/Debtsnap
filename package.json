@@ -39,5 +39,8 @@
 		"svelte-french-toast": "^1.2.0",
 		"uniqid": "^5.4.0",
 		"web-push": "^3.6.6"
+	},
+	"browser":{
+		"web-push":false
 	}
 }
