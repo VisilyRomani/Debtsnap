@@ -1,38 +1,29 @@
-# create-svelte
+ <h1 align = center>
+  <img src="https://github.com/VisilyRomani/Debtsnap/assets/36494994/6e93a252-bd77-4033-80e9-83a7f7da32f3" style="width: 20%"><br>
+  DebtSnap
+</h1>
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+# Introduction
 
-## Creating a project
+DebtSnap is a SvelteKit Progressive Web App designed to simplify and streamline the process of tracking debts among friends, family, or colleagues. This application allows you to effortlessly manage the money you owe to others and the debts others owe to you, providing a convenient solution for keeping financial transactions transparent and organized.
 
-If you're seeing this, you've probably already done this step. Congrats!
+# Getting Started
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+Make sure you have the prerequisites installed.
 
-# create a new project in my-app
-npm create svelte@latest my-app
+- [Node.js](https://nodejs.org/en)
+  
+Install the dependencies:
+```sh
+npm i
 ```
 
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
+To launch the development server:
+```sh
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
 
-## Building
-
-To create a production version of your app:
-
-```bash
+Build steps
+```sh
 npm run build
 ```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
