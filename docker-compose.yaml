@@ -4,9 +4,9 @@ version: '3'
 
 services:
   external:
-    container_name: DebtSnap
+    container_name: debtsnap
     # The name of the image that will be created when building this container
-    image: DebtSnap:latest
+    image: debtsnap:latest
     build:
       context: .
       dockerfile: Dockerfile
