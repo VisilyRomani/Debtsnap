@@ -15,10 +15,10 @@ services:
       # Internal server error messages will not send stacktrace to the browser in production
       - NODE_ENV=production
 
-      - PRIVATE_VAPID_KEY=${PRIVATE_VAPID_KEY}
-      - PUBLIC_VAPID_KEY=${PUBLIC_VAPID_KEY}
-      - SECRET_EMAIL=${SECRET_EMAIL}
-      - SECRET_PASSWORD=${SECRET_PASSWORD}
+      - SOME_VARIABLE=${PRIVATE_VAPID_KEY}
+      - SOME_VARIABLE=${PUBLIC_VAPID_KEY}
+      - SOME_VARIABLE=${SECRET_EMAIL}
+      - SOME_VARIABLE=${SECRET_PASSWORD}
 
     restart: unless-stopped
     ports:
